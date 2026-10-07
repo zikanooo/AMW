@@ -1,0 +1,242 @@
+/* ==========================================================================
+   Open Motion — Ultra-Smooth Fluid Animations & GPU Optimization
+   High-framerate (60fps/120fps), anti-jank, responsive micro-interactions
+   ========================================================================== */
+
+:root {
+  /* Dynamic timing & spring physics curves */
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-fluid: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-sharp: cubic-bezier(0.4, 0, 0.6, 1);
+  
+  --dur-instant: 120ms;
+  --dur-fast: 200ms;
+  --dur-normal: 320ms;
+  --dur-gentle: 480ms;
+
+  --gpu-shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.24);
+  --gpu-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.36);
+  --gpu-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.52);
+  --accent-glow: 0 0 16px rgba(0, 215, 167, 0.35);
+}
+
+/* Base font rendering & subpixel smoothness */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Touch responsiveness - remove 300ms mobile touch delay */
+button, input, select, textarea, a, .chip, .projectCard, .shapeItem, .insBtn, .omsFontCard {
+  touch-action: manipulation;
+}
+
+/* --------------------------------------------------------------------------
+   GPU Acceleration & Composition Layering
+   -------------------------------------------------------------------------- */
+.canvasWrap,
+.viewport,
+.playhead,
+.clip,
+.drawer,
+.modal,
+.modalShade,
+.toast,
+.omsStudioOverlay {
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Buttons & Tactile Feedback
+   -------------------------------------------------------------------------- */
+button, .btn, .insBtn, .projectCard, .shapeItem, .fabHome {
+  transition: transform var(--dur-instant) var(--ease-fluid),
+              background-color var(--dur-instant) ease,
+              border-color var(--dur-instant) ease,
+              box-shadow var(--dur-instant) ease,
+              opacity var(--dur-instant) ease;
+}
+
+button:active, .btn:active, .insBtn:active {
+  transform: scale(0.96);
+}
+
+.fabHome {
+  transition: transform var(--dur-fast) var(--ease-spring),
+              box-shadow var(--dur-fast) var(--ease-spring),
+              background-color var(--dur-instant) ease;
+}
+.fabHome:hover {
+  transform: translateX(-50%) scale(1.08);
+  box-shadow: 0 12px 32px rgba(0, 215, 167, 0.45);
+}
+.fabHome:active {
+  transform: translateX(-50%) scale(0.94);
+}
+
+.plusBtn {
+  transition: transform var(--dur-fast) var(--ease-spring),
+              box-shadow var(--dur-fast) var(--ease-spring),
+              background-color var(--dur-instant) ease;
+}
+.plusBtn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 215, 167, 0.3);
+}
+.plusBtn:active {
+  transform: scale(0.92);
+}
+
+/* --------------------------------------------------------------------------
+   Smooth Playhead & Timeline Scrubbing
+   -------------------------------------------------------------------------- */
+.playhead {
+  will-change: left;
+}
+.playhead:before {
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+.timelineArea.playhead-moving .playhead {
+  transition: none !important; /* Zero lag during scrub */
+}
+.timelineArea.playhead-centered .playhead {
+  transition: left var(--dur-fast) var(--ease-out-expo);
+}
+
+/* Timeline clips & keyframes */
+.clip {
+  transition: outline-color var(--dur-instant) ease, box-shadow var(--dur-instant) ease;
+}
+.clip.sel {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.kf {
+  transition: transform var(--dur-fast) var(--ease-spring),
+              box-shadow var(--dur-fast) ease,
+              background-color var(--dur-instant) ease;
+  will-change: transform;
+}
+.kf:hover {
+  transform: rotate(45deg) scale(1.35);
+  box-shadow: 0 0 10px rgba(255, 107, 157, 0.8);
+}
+
+/* --------------------------------------------------------------------------
+   Drawers: Fluid Slide-Up & Dampening
+   -------------------------------------------------------------------------- */
+.drawer {
+  will-change: transform, opacity;
+  transition: transform var(--dur-normal) var(--ease-out-expo),
+              opacity var(--dur-fast) ease;
+  box-shadow: var(--gpu-shadow-lg);
+}
+
+/* Modals & Backdrop Blur */
+.modalShade {
+  transition: opacity var(--dur-fast) var(--ease-smooth);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.modal {
+  will-change: transform, opacity;
+  transition: transform var(--dur-normal) var(--ease-out-expo),
+              opacity var(--dur-fast) ease;
+  box-shadow: var(--gpu-shadow-lg);
+}
+
+/* Toast Notifications */
+.toast {
+  will-change: transform, opacity;
+  transition: transform var(--dur-normal) var(--ease-spring),
+              opacity var(--dur-fast) var(--ease-fluid) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--gpu-shadow-md);
+}
+
+/* --------------------------------------------------------------------------
+   Project Cards & Gallery Animation
+   -------------------------------------------------------------------------- */
+.projectCard {
+  will-change: transform, box-shadow;
+  transition: transform var(--dur-fast) var(--ease-out-expo),
+              box-shadow var(--dur-fast) ease,
+              border-color var(--dur-instant) ease;
+}
+.projectCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+.projectCard:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* --------------------------------------------------------------------------
+   Shape Studio & Control Rulers Fluid Scrubbing
+   -------------------------------------------------------------------------- */
+.effectParamRulerShell {
+  touch-action: pan-y !important;
+  will-change: transform;
+}
+.effectParamRulerPlayhead {
+  will-change: transform, left;
+  transition: box-shadow var(--dur-fast) ease;
+}
+.effectParamRulerShell:hover .effectParamRulerPlayhead,
+.effectParamRulerShell.active .effectParamRulerPlayhead {
+  box-shadow: 0 0 10px rgba(84, 220, 179, 0.8) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Smooth Scrolling Containers
+   -------------------------------------------------------------------------- */
+.timelineScroll,
+.projectsWrap,
+.drawerBody,
+.omsStudioBody,
+.shapeStudio {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+}
+
+/* Smooth Tab transitions */
+.homeTab, .assetTabs button, .omsColorTab {
+  transition: background-color var(--dur-fast) ease,
+              color var(--dur-fast) ease,
+              border-color var(--dur-fast) ease,
+              transform var(--dur-instant) var(--ease-spring);
+}
+.homeTab:active, .assetTabs button:active, .omsColorTab:active {
+  transform: scale(0.95);
+}
+
+/* --------------------------------------------------------------------------
+   Performance: Anti-Jank GPU Layering
+   -------------------------------------------------------------------------- */
+.canvasWrap canvas {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

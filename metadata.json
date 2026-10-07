@@ -1,0 +1,8 @@
+{
+  "name": "Open Motion",
+  "description": "Browser-based animation, motion graphics, and video editing studio.",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}

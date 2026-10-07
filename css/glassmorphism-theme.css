@@ -1,0 +1,666 @@
+/* ==========================================================================
+   AXE MOTION — Ultimate Glassmorphism & Fluid Animation Theme
+   Transparent frosted glass, neon luminescence, mobile-first responsiveness,
+   and buttery smooth 60fps/120fps micro-animations.
+   ========================================================================== */
+
+:root {
+  /* Glassmorphism Color Palette & Transparencies */
+  --axe-bg-base: #0a0d17;
+  --axe-glass-bg: rgba(17, 22, 38, 0.65);
+  --axe-glass-panel: rgba(22, 28, 48, 0.68);
+  --axe-glass-card: rgba(26, 33, 56, 0.62);
+  --axe-glass-card-hover: rgba(34, 43, 72, 0.78);
+  --axe-glass-sheet: rgba(14, 18, 32, 0.82);
+  
+  --axe-border-glass: rgba(255, 255, 255, 0.13);
+  --axe-border-glass-light: rgba(255, 255, 255, 0.22);
+  --axe-border-glass-subtle: rgba(255, 255, 255, 0.08);
+  --axe-border-neon: rgba(0, 240, 181, 0.45);
+
+  --axe-neon-green: #00f0b5;
+  --axe-neon-cyan: #38bdf8;
+  --axe-neon-indigo: #818cf8;
+  --axe-neon-purple: #c084fc;
+  --axe-neon-pink: #f43f5e;
+  --axe-neon-amber: #fbbf24;
+
+  --axe-blur-sm: blur(12px) saturate(180%);
+  --axe-blur-md: blur(24px) saturate(190%);
+  --axe-blur-lg: blur(36px) saturate(200%);
+
+  --axe-shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.16);
+  --axe-shadow-glass-elevated: 0 16px 48px 0 rgba(0, 0, 0, 0.58), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+  --axe-shadow-neon: 0 0 24px rgba(0, 240, 181, 0.35);
+
+  --axe-ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --axe-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --axe-ease-smooth: cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --------------------------------------------------------------------------
+   Ambient Animated Mesh Background
+   -------------------------------------------------------------------------- */
+body, .app {
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 240, 181, 0.14) 0%, transparent 40%),
+    radial-gradient(circle at 90% 15%, rgba(129, 140, 248, 0.16) 0%, transparent 45%),
+    radial-gradient(circle at 50% 80%, rgba(192, 132, 252, 0.14) 0%, transparent 50%),
+    linear-gradient(145deg, #090c15 0%, #0e1322 50%, #080a12 100%) !important;
+  color: #f1f5f9 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  overflow: hidden;
+  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Ambient Floating Glass Glow Orbs in Background */
+body::before, body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  animation: axeFloatOrb 18s ease-in-out infinite alternate;
+}
+body::before {
+  top: -100px;
+  left: -80px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(0, 240, 181, 0.25), rgba(56, 189, 248, 0.05));
+}
+body::after {
+  bottom: -120px;
+  right: -100px;
+  width: 440px;
+  height: 440px;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.25), rgba(192, 132, 252, 0.05));
+  animation-duration: 22s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes axeFloatOrb {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(60px, 40px, 0) scale(1.15); }
+  100% { transform: translate3d(-40px, 80px, 0) scale(0.95); }
+}
+
+/* --------------------------------------------------------------------------
+   Home View: Glassmorphic Hub
+   -------------------------------------------------------------------------- */
+.home {
+  background: transparent !important;
+  color: #f1f5f9 !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Home Header */
+.homeTop {
+  background: var(--axe-glass-bg) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+  border-bottom: 1px solid var(--axe-border-glass) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+.homeWordmark b {
+  background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 60%, #00f0b5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 17px !important;
+  letter-spacing: 0.8px;
+  font-weight: 900 !important;
+  text-shadow: 0 2px 14px rgba(0, 240, 181, 0.3);
+}
+
+.homeTop .leftBtn, .homeTop .rightBtn {
+  color: #cbd5e1 !important;
+  transition: transform 0.2s var(--axe-ease-spring), color 0.2s ease;
+}
+.homeTop .leftBtn:hover, .homeTop .rightBtn:hover {
+  color: var(--axe-neon-green) !important;
+  transform: scale(1.1);
+}
+.homeTop .leftBtn:active, .homeTop .rightBtn:active {
+  transform: scale(0.92);
+}
+
+/* Home Navigation Tabs (Pill Glass) */
+.homeTabs {
+  background: transparent !important;
+  padding: 14px 16px 6px !important;
+  gap: 10px !important;
+}
+.homeTab {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border: 1px solid var(--axe-border-glass-subtle) !important;
+  color: #94a3b8 !important;
+  padding: 8px 18px !important;
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+  transition: all 0.28s var(--axe-ease-spring) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+.homeTab:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+.homeTab.active {
+  background: linear-gradient(135deg, rgba(0, 240, 181, 0.25), rgba(56, 189, 248, 0.15)) !important;
+  border-color: var(--axe-neon-green) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(0, 240, 181, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Project Cards (Translucent Glass Cards with Entry Animation) */
+.projectsWrap {
+  padding: 12px 16px 100px !important;
+}
+
+.sectionRow h3 {
+  color: #e2e8f0 !important;
+  font-size: 13.5px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.3px;
+}
+.sectionRow select {
+  background: var(--axe-glass-bg) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  color: #94a3b8 !important;
+  border-radius: 8px !important;
+  padding: 4px 8px !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+}
+
+.projectCard {
+  position: relative !important;
+  overflow: hidden !important;
+  background: var(--axe-glass-card) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  border-radius: 16px !important;
+  padding: 12px 14px !important;
+  box-shadow: var(--axe-shadow-glass) !important;
+  margin: 12px 0 !important;
+  transition: transform 0.28s var(--axe-ease-spring),
+              box-shadow 0.28s ease,
+              border-color 0.28s ease !important;
+  animation: axeCardEntrance 0.5s var(--axe-ease-spring) backwards;
+}
+
+.projectCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    400px circle at var(--glass-mouse-x, 50%) var(--glass-mouse-y, 50%),
+    rgba(0, 240, 181, 0.15),
+    transparent 60%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.projectCard:hover::before {
+  opacity: 1;
+}
+
+@keyframes axeCardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.projectCard:hover {
+  background: var(--axe-glass-card-hover) !important;
+  border-color: var(--axe-border-neon) !important;
+  transform: translateY(-3px) scale(1.01) !important;
+  box-shadow: var(--axe-shadow-glass-elevated), 0 0 20px rgba(0, 240, 181, 0.2) !important;
+}
+.projectCard:active {
+  transform: translateY(0) scale(0.985) !important;
+}
+
+.projectThumb {
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.9)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+}
+.projectThumb:after {
+  border: 2px solid var(--axe-neon-green) !important;
+  box-shadow: 0 0 10px rgba(0, 240, 181, 0.5) !important;
+}
+
+.projectMeta b {
+  color: #f8fafc !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+.projectMeta span {
+  color: #94a3b8 !important;
+}
+.more {
+  color: #94a3b8 !important;
+  transition: color 0.2s ease, transform 0.2s var(--axe-ease-spring);
+}
+.more:hover {
+  color: var(--axe-neon-green) !important;
+  transform: scale(1.15);
+}
+
+/* Home Bottom Navigation (Floating Glass Dock) */
+.homeBottom {
+  background: rgba(15, 20, 35, 0.75) !important;
+  backdrop-filter: var(--axe-blur-lg) !important;
+  -webkit-backdrop-filter: var(--axe-blur-lg) !important;
+  border-top: 1px solid var(--axe-border-glass) !important;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  padding-bottom: env(safe-area-inset-bottom, 0) !important;
+  height: calc(65px + env(safe-area-inset-bottom, 0px)) !important;
+  z-index: 50 !important;
+}
+.homeBottom button {
+  color: #94a3b8 !important;
+  transition: all 0.24s var(--axe-ease-spring) !important;
+}
+.homeBottom button.active {
+  color: var(--axe-neon-green) !important;
+}
+.homeBottom button.active span {
+  filter: drop-shadow(0 0 8px rgba(0, 240, 181, 0.6));
+  transform: translateY(-2px);
+}
+.homeBottom button:hover {
+  color: #e2e8f0 !important;
+}
+
+/* Glowing Neon Glass FAB Button */
+.fabHome {
+  background: linear-gradient(135deg, #00f0b5 0%, #06b6d4 100%) !important;
+  border: 4px solid rgba(15, 23, 42, 0.8) !important;
+  color: #041f17 !important;
+  box-shadow: 0 0 28px rgba(0, 240, 181, 0.55), 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  animation: axeFabBreathe 3s ease-in-out infinite alternate !important;
+}
+@keyframes axeFabBreathe {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 240, 181, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4);
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    box-shadow: 0 0 36px rgba(0, 240, 181, 0.75), 0 12px 30px rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%) scale(1.04);
+  }
+}
+.fabHome:active {
+  transform: translateX(-50%) scale(0.92) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Editor Workspace: Glass Composition Studio
+   -------------------------------------------------------------------------- */
+.editor {
+  background: transparent !important;
+}
+
+/* Editor Header Bar */
+.editorTop {
+  background: var(--axe-glass-bg) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+  border-bottom: 1px solid var(--axe-border-glass) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+.topIcon {
+  color: #cbd5e1 !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.topIcon:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--axe-neon-green) !important;
+  transform: scale(1.08);
+}
+.topIcon:active {
+  transform: scale(0.92);
+}
+
+/* Preview Canvas Area */
+.previewArea {
+  background: rgba(10, 13, 23, 0.75) !important;
+  border-bottom: 1px solid var(--axe-border-glass) !important;
+}
+.viewport {
+  background: transparent !important;
+}
+.canvasWrap {
+  border-radius: 8px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  transition: box-shadow 0.3s ease;
+}
+.canvasWrap:hover {
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 240, 181, 0.35) !important;
+}
+
+.axisBadge {
+  background: rgba(17, 24, 39, 0.75) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  box-shadow: var(--axe-shadow-glass) !important;
+}
+.axisBadge b {
+  color: var(--axe-neon-green) !important;
+}
+
+/* Preview Control Toolbar */
+.previewTools {
+  background: rgba(15, 20, 35, 0.75) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+  border-top: 1px solid var(--axe-border-glass-subtle) !important;
+}
+.previewTools button {
+  color: #94a3b8 !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.previewTools button:hover {
+  color: #f1f5f9 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.previewTools button.active {
+  color: var(--axe-neon-green) !important;
+  background: rgba(0, 240, 181, 0.15) !important;
+  box-shadow: 0 0 12px rgba(0, 240, 181, 0.25) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Timeline & Transport: Glass Deck
+   -------------------------------------------------------------------------- */
+.timelineArea {
+  background: rgba(13, 17, 30, 0.78) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+}
+
+/* Transport Controls Bar */
+.transport {
+  background: rgba(17, 23, 40, 0.65) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border-bottom: 1px solid var(--axe-border-glass-subtle) !important;
+}
+.transport button {
+  color: #94a3b8 !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.transport button:hover {
+  color: #f8fafc !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.transport button.active {
+  color: var(--axe-neon-green) !important;
+  background: rgba(0, 240, 181, 0.18) !important;
+  box-shadow: 0 0 14px rgba(0, 240, 181, 0.3) !important;
+}
+.timeRead {
+  background: rgba(11, 15, 26, 0.8) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  color: #cbd5e1 !important;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Timeline Ruler & Tracks */
+.ruler {
+  background: rgba(11, 15, 27, 0.85) !important;
+  border-bottom: 1px solid var(--axe-border-glass-subtle) !important;
+}
+.rTick {
+  border-left-color: rgba(255, 255, 255, 0.12) !important;
+  color: #64748b !important;
+}
+
+.trackHead {
+  background: rgba(18, 24, 42, 0.82) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border-right: 1px solid var(--axe-border-glass) !important;
+  border-bottom: 1px solid var(--axe-border-glass-subtle) !important;
+}
+.trackHead.sel {
+  background: rgba(30, 41, 68, 0.9) !important;
+  border-left: 3px solid var(--axe-neon-green) !important;
+}
+.trackLane {
+  border-bottom: 1px solid var(--axe-border-glass-subtle) !important;
+}
+
+/* Playhead Neon Laser Glow */
+.playhead {
+  background: #ffffff !important;
+  box-shadow: 0 0 12px 1px rgba(0, 240, 181, 0.9), 0 0 24px rgba(0, 240, 181, 0.5) !important;
+}
+.playhead:before {
+  background: #00f0b5 !important;
+  box-shadow: 0 0 10px rgba(0, 240, 181, 0.8) !important;
+}
+
+/* Timeline Clips (Glass Capsules) */
+.clip {
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  transition: transform 0.18s var(--axe-ease-spring), box-shadow 0.18s ease !important;
+}
+.clip.sel {
+  outline: 2px solid #ffffff !important;
+  outline-offset: 1px !important;
+  box-shadow: 0 0 16px rgba(0, 240, 181, 0.6) !important;
+}
+
+/* Bottom Tools Dock */
+.bottomTools {
+  background: rgba(15, 20, 36, 0.8) !important;
+  backdrop-filter: var(--axe-blur-md) !important;
+  -webkit-backdrop-filter: var(--axe-blur-md) !important;
+  border-top: 1px solid var(--axe-border-glass) !important;
+}
+.bottomTools button {
+  color: #94a3b8 !important;
+  transition: all 0.22s var(--axe-ease-spring) !important;
+}
+.bottomTools button:hover {
+  color: #f1f5f9 !important;
+}
+.bottomTools button.active {
+  color: var(--axe-neon-green) !important;
+}
+.bottomTools button.active span {
+  filter: drop-shadow(0 0 8px rgba(0, 240, 181, 0.6));
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   Drawers, Modals & Sheets (Frosted Glass Panels)
+   -------------------------------------------------------------------------- */
+.drawer {
+  background: var(--axe-glass-sheet) !important;
+  backdrop-filter: var(--axe-blur-lg) !important;
+  -webkit-backdrop-filter: var(--axe-blur-lg) !important;
+  border-top: 1px solid var(--axe-border-glass-light) !important;
+  box-shadow: 0 -16px 48px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+}
+.drawerHead {
+  background: rgba(22, 28, 48, 0.6) !important;
+  border-bottom: 1px solid var(--axe-border-glass) !important;
+}
+.drawerHead b {
+  color: #f8fafc !important;
+  letter-spacing: 0.2px;
+}
+
+.modalShade {
+  background: rgba(4, 7, 15, 0.7) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+.modal {
+  background: rgba(18, 24, 42, 0.88) !important;
+  backdrop-filter: var(--axe-blur-lg) !important;
+  -webkit-backdrop-filter: var(--axe-blur-lg) !important;
+  color: #f8fafc !important;
+  border: 1px solid var(--axe-border-glass-light) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.22) !important;
+}
+.modalHead {
+  color: #f8fafc !important;
+}
+.seg {
+  background: rgba(10, 14, 25, 0.8) !important;
+  border: 1px solid var(--axe-border-glass-subtle) !important;
+}
+.seg button {
+  color: #94a3b8 !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.seg button.active {
+  background: linear-gradient(135deg, rgba(0, 240, 181, 0.3), rgba(56, 189, 248, 0.2)) !important;
+  border: 1px solid var(--axe-neon-green) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 16px rgba(0, 240, 181, 0.3) !important;
+}
+
+.aspect {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  color: #cbd5e1 !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.aspect:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+.aspect.active {
+  border-color: var(--axe-neon-green) !important;
+  color: var(--axe-neon-green) !important;
+  background: rgba(0, 240, 181, 0.12) !important;
+  box-shadow: 0 0 18px rgba(0, 240, 181, 0.25) !important;
+}
+
+.createBtn {
+  background: linear-gradient(135deg, #00f0b5 0%, #0284c7 100%) !important;
+  color: #031e17 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 8px 24px rgba(0, 240, 181, 0.35) !important;
+  transition: all 0.2s var(--axe-ease-spring) !important;
+}
+.createBtn:hover {
+  box-shadow: 0 12px 30px rgba(0, 240, 181, 0.5) !important;
+  transform: translateY(-1px);
+}
+.createBtn:active {
+  transform: scale(0.97) !important;
+}
+
+/* Shape Studio Grid Items (Glass Tiles) */
+.shapeItem {
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12) !important;
+  transition: all 0.24s var(--axe-ease-spring) !important;
+}
+.shapeItem:hover {
+  background: rgba(0, 240, 181, 0.15) !important;
+  border-color: var(--axe-neon-green) !important;
+  color: var(--axe-neon-green) !important;
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 8px 20px rgba(0, 240, 181, 0.25) !important;
+}
+.shapeItem:active {
+  transform: scale(0.94) !important;
+}
+
+/* Export Sheet & Option Rows */
+.exportSheet {
+  background: rgba(14, 18, 33, 0.94) !important;
+  backdrop-filter: var(--axe-blur-lg) !important;
+  -webkit-backdrop-filter: var(--axe-blur-lg) !important;
+  color: #f8fafc !important;
+}
+.exportTop {
+  background: rgba(22, 28, 48, 0.75) !important;
+  border-bottom: 1px solid var(--axe-border-glass) !important;
+  color: #f8fafc !important;
+}
+.exportOption {
+  background: rgba(26, 33, 58, 0.65) !important;
+  border: 1px solid var(--axe-border-glass) !important;
+  backdrop-filter: var(--axe-blur-sm) !important;
+  -webkit-backdrop-filter: var(--axe-blur-sm) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--axe-shadow-glass) !important;
+}
+.exportFoot button {
+  background: linear-gradient(135deg, #00f0b5 0%, #06b6d4 100%) !important;
+  color: #032018 !important;
+  box-shadow: 0 8px 28px rgba(0, 240, 181, 0.35) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Mobile-First Resolution Optimization (320px - 480px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .homeTop {
+    height: calc(52px + env(safe-area-inset-top, 0px)) !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+  }
+  .projectsWrap {
+    padding: 10px 12px 105px !important;
+  }
+  .projectCard {
+    grid-template-columns: 66px 1fr 26px !important;
+    gap: 9px !important;
+    border-radius: 14px !important;
+    margin: 9px 0 !important;
+  }
+  .projectThumb {
+    width: 66px !important;
+    height: 46px !important;
+  }
+  .homeBottom {
+    height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+    font-size: 9.5px !important;
+  }
+  .fabHome {
+    bottom: calc(34px + env(safe-area-inset-bottom, 0px)) !important;
+    width: 54px !important;
+    height: 54px !important;
+    font-size: 27px !important;
+  }
+  .drawer {
+    border-radius: 20px 20px 0 0 !important;
+  }
+  .modal {
+    border-radius: 20px 20px 0 0 !important;
+  }
+}

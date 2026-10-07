@@ -1,0 +1,2432 @@
+
+/* ==================== oms-v429-layer-actions ==================== */
+/* V4.29 — compact layer clipboard/actions popover. */
+.layerActionsBtn{
+  position:relative;
+  display:grid;
+  place-items:center;
+}
+.layerActionsBtn.active{
+  color:#fff!important;
+  background:#252b3e!important;
+}
+.layerActionsToolbarIcon{
+  position:relative;
+  width:18px;
+  height:17px;
+  display:block;
+}
+.layerActionsToolbarIcon::before,
+.layerActionsToolbarIcon::after{
+  content:"";
+  position:absolute;
+  width:10px;
+  height:12px;
+  border:1.25px solid currentColor;
+  border-radius:3px;
+  background:transparent;
+}
+.layerActionsToolbarIcon::before{left:1px;top:4px}
+.layerActionsToolbarIcon::after{left:6px;top:0}
+.layerActionsToolbarIcon{
+  --plus-x:15px;
+}
+.layerActionsBtn .layerActionsToolbarIcon span{display:none}
+.layerActionsToolbarIcon:after{}
+.layerActionsBtn::before,
+.layerActionsBtn::after{
+  content:"";
+  position:absolute;
+  background:currentColor;
+  border-radius:2px;
+  pointer-events:none;
+}
+.layerActionsBtn::before{width:8px;height:1.25px;right:3px;bottom:5px}
+.layerActionsBtn::after{width:1.25px;height:8px;right:6.35px;bottom:1.8px}
+
+.layerActionsShade{
+  position:fixed;
+  inset:0;
+  z-index:220;
+  background:rgba(4,7,13,.36);
+  backdrop-filter:blur(1.5px);
+  -webkit-backdrop-filter:blur(1.5px);
+}
+.layerActionsPopup{
+  position:fixed;
+  width:min(335px,calc(100vw - 20px));
+  max-height:min(520px,calc(100vh - 20px));
+  overflow:auto;
+  color:#eef2fb;
+  background:linear-gradient(180deg,#252a3e 0%,#202536 100%);
+  border:1px solid #3b435c;
+  border-radius:16px;
+  box-shadow:0 22px 58px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.025);
+  padding:9px;
+  overscroll-behavior:contain;
+}
+.layerActionsHead{
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:3px 4px 8px 9px;
+  border-bottom:1px solid #343b51;
+}
+.layerActionsHead>div{min-width:0}
+.layerActionsHead b{display:block;font-size:13px}
+.layerActionsHead small{display:block;margin-top:2px;color:#8f9ab1;font-size:8px}
+.layerActionsHead button{
+  flex:0 0 34px;
+  width:34px;
+  height:34px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#aab3c6;
+  font-size:22px;
+}
+.layerActionsHead button:active{background:#31384d;color:white}
+.layerActionsList{display:grid;padding-top:5px}
+.layerActionRow{
+  width:100%;
+  min-height:58px;
+  border:0;
+  border-radius:11px;
+  background:transparent;
+  color:#e8edf7;
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  padding:7px 8px;
+  text-align:left;
+  -webkit-tap-highlight-color:transparent;
+}
+.layerActionRow:not(:disabled):active,
+.layerActionRow:not(:disabled):focus-visible{
+  background:#30384d;
+  outline:none;
+}
+.layerActionRow:disabled{
+  opacity:.34;
+  color:#8791a8;
+}
+.layerActionCopy{min-width:0}
+.layerActionCopy b{
+  display:block;
+  font-size:12px;
+  font-weight:650;
+  line-height:1.15;
+}
+.layerActionCopy small{
+  display:block;
+  margin-top:3px;
+  color:#929db3;
+  font-size:8px;
+  line-height:1.25;
+}
+.layerActionRow:disabled .layerActionCopy small{color:#737d92}
+.layerActionMenuIcon{
+  position:relative;
+  width:35px;
+  height:35px;
+  display:block;
+  color:#f3f6fc;
+}
+.layerActionMenuIcon::before,
+.layerActionMenuIcon::after{
+  content:"";
+  position:absolute;
+  width:18px;
+  height:22px;
+  border:1.7px solid currentColor;
+  border-radius:5px;
+  background:#252a3e;
+}
+.layerActionMenuIcon::before{left:3px;top:9px}
+.layerActionMenuIcon::after{left:11px;top:3px}
+.layerActionMenuIcon.duplicate i::before,
+.layerActionMenuIcon.duplicate i::after,
+.layerActionMenuIcon.copyLayer i::before,
+.layerActionMenuIcon.copyLayer i::after,
+.layerActionMenuIcon.pasteLayer i::before,
+.layerActionMenuIcon.pasteLayer i::after{
+  content:"";
+  position:absolute;
+  z-index:2;
+  background:currentColor;
+  border-radius:2px;
+}
+.layerActionMenuIcon.duplicate i::before{width:11px;height:1.8px;left:16px;top:14px}
+.layerActionMenuIcon.duplicate i::after{width:1.8px;height:11px;left:20.6px;top:9.4px}
+.layerActionMenuIcon.copyLayer i::before{
+  width:10px;height:1.8px;left:17px;top:11px;transform:rotate(-45deg);transform-origin:right center
+}
+.layerActionMenuIcon.copyLayer i::after{
+  width:7px;height:7px;left:21px;top:7px;background:transparent;border-top:1.8px solid currentColor;border-right:1.8px solid currentColor
+}
+.layerActionMenuIcon.pasteLayer i::before{
+  width:10px;height:1.8px;left:10px;top:22px;transform:rotate(-45deg);transform-origin:left center
+}
+.layerActionMenuIcon.pasteLayer i::after{
+  width:7px;height:7px;left:7px;top:20px;background:transparent;border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor
+}
+.layerActionMenuIcon.pasteStyle i{
+  position:absolute;
+  z-index:3;
+  right:0;
+  top:0;
+  width:15px;
+  height:15px;
+  border-radius:5px;
+  display:grid;
+  place-items:center;
+  font-style:normal;
+  font-size:8px;
+  font-weight:800;
+  color:#10201c;
+  background:var(--accent);
+  box-shadow:0 0 0 2px #252a3e;
+}
+.layerActionMenuIcon.selectAll::before,
+.layerActionMenuIcon.selectAll::after{display:none}
+.layerActionMenuIcon.selectAll{
+  border:1.7px solid currentColor;
+  border-radius:9px;
+  width:31px;height:27px;
+  margin-left:2px;
+}
+.layerActionMenuIcon.selectAll i::before,
+.layerActionMenuIcon.selectAll i::after{
+  content:"";
+  position:absolute;
+}
+.layerActionMenuIcon.selectAll i::before{
+  left:7px;top:12px;width:7px;height:4px;
+  border-left:2px solid currentColor;
+  border-bottom:2px solid currentColor;
+  transform:rotate(-45deg);
+}
+.layerActionMenuIcon.selectAll i::after{
+  right:5px;top:6px;width:8px;height:1.6px;
+  background:currentColor;
+  box-shadow:0 6px 0 currentColor,0 12px 0 currentColor;
+  border-radius:2px;
+}
+.layerActionsStatus{
+  min-height:18px;
+  padding:5px 10px 2px;
+  color:#7fe6cd;
+  font-size:8px;
+  border-top:1px solid #30374c;
+}
+.trackHead.multiSel{background:#263246!important;box-shadow:inset 3px 0 0 var(--accent)}
+.clip.multiSel{outline:2px solid rgba(126,234,209,.9);outline-offset:1px}
+
+@media (max-width:560px){
+  .layerActionsPopup{width:min(318px,calc(100vw - 16px));border-radius:15px}
+  .layerActionRow{min-height:56px}
+}
+
+/* ==================== oms-editor-split-v393 ==================== */
+/* =========================================================
+   V3.93 — Preview / Timeline vertical split controller
+   ========================================================= */
+.editorSplitSlot{
+  min-width:38px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  align-self:stretch;
+}
+.previewTools .editorSplitHandle{
+  width:34px;
+  height:28px;
+  min-width:34px;
+  padding:0;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#8994aa;
+  display:grid;
+  place-items:center;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  cursor:ns-resize;
+}
+.previewTools .editorSplitHandle:hover,
+.previewTools .editorSplitHandle:focus-visible,
+.previewTools .editorSplitHandle.dragging{
+  color:var(--accent);
+  background:#202739;
+  outline:none;
+}
+.editorSplitGrip{
+  width:18px;
+  height:14px;
+  position:relative;
+  display:block;
+}
+.editorSplitGrip:before,
+.editorSplitGrip:after{
+  content:"";
+  position:absolute;
+  left:3px;
+  right:3px;
+  height:1.5px;
+  border-radius:999px;
+  background:currentColor;
+  box-shadow:0 4px 0 currentColor;
+}
+.editorSplitGrip:before{top:2px}
+.editorSplitGrip:after{bottom:2px;box-shadow:none}
+.editorSplitHandle.dragging .editorSplitGrip{transform:scaleY(1.08)}
+.editorMain.editorSplitDragging,
+.editorMain.editorSplitDragging *{cursor:ns-resize!important}
+
+/* V3.94 — split must follow the finger directly. The old 160 ms grid-row
+   transition made manual dragging feel delayed and could leave a tall canvas
+   using the pre-transition viewport size after a drawer opened. */
+.editorMain.fitCompositionLayout,
+.editorMain.fitCompositionLayout.editorSplitDragging{
+  transition:none!important;
+}
+
+/* The split control is a mobile/tablet vertical-layout affordance only. */
+@media (min-width:900px){
+  .editorSplitSlot{display:none!important}
+}
+
+/* ==================== oms-portrait-side-controls-v397 ==================== */
+/* =========================================================
+   V3.98 — Portrait Side Controls + Timeline Grid Fix
+   For 9:16-or-taller compositions on mobile/tablet, the two horizontal
+   editor toolbars move into the otherwise unused left/right canvas gutters.
+   This returns their vertical space to the composition preview and timeline.
+   ========================================================= */
+.portraitSideRail{
+  position:absolute;
+  z-index:24;
+  width:46px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+}
+.portraitLeftRail{left:3px;top:7px;bottom:7px}
+.portraitRightRail{right:3px;top:54px;bottom:7px}
+.editorMain.portraitSideControls .portraitSideRail{display:flex}
+
+/* Reserve real gutters. applyCompositionFitZoom() already subtracts viewport
+   padding, so the canvas is guaranteed not to run underneath either rail. */
+.editorMain.portraitSideControls .viewport{
+  padding-left:52px;
+  padding-right:52px;
+}
+.editorMain.portraitSideControls .previewArea{
+  grid-template-rows:minmax(0,1fr)!important;
+}
+.editorMain.portraitSideControls .timelineArea{
+  /* V3.98: transport is physically moved out of timelineArea. With the old
+     3-row grid, timelineScroll became the first auto-placed child and landed
+     in the collapsed 0px transport row. Use one real row and pin the scroll
+     viewport to it explicitly so ruler/tracks can never collapse. */
+  grid-template-rows:minmax(0,1fr)!important;
+}
+.editorMain.portraitSideControls .timelineScroll{
+  grid-row:1!important;
+  min-height:0!important;
+  height:100%!important;
+}
+.editorMain.portraitSideControls .timelineZoomBadge{top:6px!important}
+
+/* Once the transport row is gone, timeline overlays start at the ruler. */
+.editorMain.portraitSideControls .playhead,
+.editorMain.portraitSideControls .keyframeDragGuide,
+.editorMain.portraitSideControls .layerTrimDragGuide,
+.editorMain.portraitSideControls .layerMoveDragGuide{
+  top:0!important;
+  bottom:0!important;
+}
+.editorMain.portraitSideControls .liveAudioMeter{top:0!important}
+
+/* The original nodes are moved, not cloned, so all existing event listeners,
+   ids, keyframe logic and split-handle pointer ownership remain intact. */
+.portraitSideRail .previewTools,
+.portraitSideRail .transport{
+  pointer-events:auto;
+  position:static!important;
+  width:44px;
+  height:auto!important;
+  min-height:0!important;
+  max-height:100%;
+  margin:0;
+  padding:4px 3px!important;
+  border:1px solid rgba(62,70,94,.72)!important;
+  border-radius:12px;
+  background:rgba(18,22,32,.90)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.22);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.portraitLeftRail .previewTools{
+  display:flex!important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  border-top:1px solid rgba(62,70,94,.72)!important;
+}
+.portraitSideRail .previewTools button,
+.portraitSideRail .transport button{
+  width:36px!important;
+  min-width:36px!important;
+  height:32px!important;
+  flex:0 0 32px;
+  padding:0!important;
+}
+.portraitSideRail .editorSplitSlot{
+  min-width:36px;
+  width:36px;
+  height:30px;
+  flex:0 0 30px!important;
+  align-self:center;
+}
+.portraitSideRail .editorSplitHandle{
+  width:36px!important;
+  height:28px!important;
+}
+
+/* Keep the existing time readout, but turn it into a compact vertical badge. */
+.portraitLeftRail .previewTools .tc{
+  min-width:0!important;
+  width:30px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-size:7px;
+  letter-spacing:.25px;
+  line-height:1;
+  overflow:hidden;
+  flex:0 0 56px;
+}
+
+/* The horizontal zoom slider becomes a compact vertical slider. */
+.portraitLeftRail .zoomCtl{
+  width:36px;
+  height:94px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  gap:0;
+  flex:0 0 94px;
+}
+.portraitLeftRail .zoomCtl span{font-size:13px;line-height:14px}
+.portraitLeftRail .zoomCtl input{
+  width:66px!important;
+  height:18px;
+  margin:22px -15px;
+  transform:rotate(-90deg);
+  transform-origin:center;
+}
+
+/* Reflow the clean transport groups vertically in the right rail. */
+.portraitRightRail .transportBalanced{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1px!important;
+  border-bottom:1px solid rgba(62,70,94,.72)!important;
+}
+.portraitRightRail .transportBalanced .transportLeft,
+.portraitRightRail .transportBalanced .transportCenter,
+.portraitRightRail .transportBalanced .transportRight{
+  width:36px;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1px!important;
+}
+
+/* Side mode is intentionally mobile/tablet only. */
+@media (min-width:900px){
+  .portraitSideRail{display:none!important}
+  .editorMain.portraitSideControls .viewport{padding-left:0;padding-right:0}
+}
+
+/* Very small phones still get touch-safe controls without consuming too much
+   horizontal gutter. */
+@media (max-width:380px){
+  .portraitSideRail{width:40px}
+  .portraitLeftRail{left:1px}.portraitRightRail{right:1px}
+  .editorMain.portraitSideControls .viewport{padding-left:44px;padding-right:44px}
+  .portraitSideRail .previewTools,.portraitSideRail .transport{width:39px;padding-left:1px!important;padding-right:1px!important}
+  .portraitSideRail .previewTools button,.portraitSideRail .transport button{width:33px!important;min-width:33px!important}
+}
+
+/* ==================== oms-collapsible-editor-top-v400 ==================== */
+/* =========================================================
+   V4.00 — Collapsible editor top bar.
+   The project/navigation bar can be hidden to reclaim vertical space.
+   Export remains pinned in the upper-right corner, and the existing floating
+   + button temporarily becomes the restore affordance while the bar is hidden.
+   ========================================================= */
+.editorTopCollapseBtn{font-size:22px;line-height:1}
+
+.editor.topBarCollapsed{
+  grid-template-rows:0 minmax(0,1fr)!important;
+}
+.editor.topBarCollapsed .editorTop{
+  height:0!important;
+  min-height:0!important;
+  padding:0!important;
+  gap:0!important;
+  border:0!important;
+  background:transparent!important;
+  overflow:visible!important;
+  position:relative;
+  z-index:90;
+  pointer-events:none;
+}
+.editor.topBarCollapsed #backHome,
+.editor.topBarCollapsed #editorTitle,
+.editor.topBarCollapsed #saveProject,
+.editor.topBarCollapsed #settingsBtn,
+.editor.topBarCollapsed #collapseEditorTop{
+  display:none!important;
+}
+.editor.topBarCollapsed .editorTop .topActions{
+  position:absolute!important;
+  top:8px;
+  right:8px;
+  width:38px;
+  height:38px;
+  display:block!important;
+  pointer-events:none;
+  z-index:92;
+}
+.editor.topBarCollapsed #openExport{
+  display:grid!important;
+  place-items:center;
+  position:absolute!important;
+  inset:0!important;
+  width:38px!important;
+  height:38px!important;
+  border:1px solid rgba(66,76,100,.72)!important;
+  border-radius:10px!important;
+  background:rgba(17,21,30,.88)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.24);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  pointer-events:auto!important;
+  z-index:93;
+}
+/* While the top bar is hidden, + is guaranteed to stay above drawers because
+   it is also the only restore control requested by the UI. */
+.editor.topBarCollapsed #plusBtn{
+  z-index:80!important;
+  transform:none!important;
+  background:#17221f!important;
+  border-color:var(--accent)!important;
+  color:var(--accent)!important;
+}
+.editor.topBarCollapsed #plusBtn::after{
+  content:"";
+  position:absolute;
+  inset:-7px;
+  border-radius:50%;
+  border:1px solid rgba(115,226,189,.16);
+  pointer-events:none;
+}
+@media (min-width:900px){
+  .editor.topBarCollapsed .editorTop .topActions{top:10px;right:12px}
+}
+
+/* ==================== oms-collapsible-editor-top-v401-fix ==================== */
+/* =========================================================
+   V4.01 — persistent collapsed-header + floating button fix.
+   Drawers must never implicitly restore the editor header. The floating +
+   stays above any open drawer; while the header is collapsed it remains the
+   dedicated restore affordance requested by the portrait workflow.
+   ========================================================= */
+.editor.drawerOverlayOpen #plusBtn{
+  position:fixed!important;
+  right:12px!important;
+  top:var(--oms-floating-plus-top,auto)!important;
+  bottom:auto!important;
+  z-index:120!important;
+}
+.editor.topBarCollapsed #plusBtn{
+  z-index:120!important;
+}
+.editor.topBarCollapsed:not(.drawerOverlayOpen) #plusBtn{
+  position:fixed!important;
+  right:12px!important;
+  top:auto!important;
+  bottom:12px!important;
+}
+@media (min-width:900px){
+  .editor.drawerOverlayOpen #plusBtn{right:20px!important}
+}
+
+/* ==================== oms-collapsible-editor-top-v402-dedicated-restore ==================== */
+/* =========================================================
+   V4.02 — dedicated top-bar restore button.
+   The green floating + is once again exclusively Add Layer. When the editor
+   header is collapsed, a separate + appears beside the pinned Export button.
+   ========================================================= */
+.restoreEditorTopBtn{display:none!important}
+.editor.topBarCollapsed .editorTop .topActions{
+  width:82px!important;
+  height:38px!important;
+  display:block!important;
+}
+.editor.topBarCollapsed #restoreEditorTop{
+  display:grid!important;
+  place-items:center;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  width:38px!important;
+  height:38px!important;
+  border:1px solid rgba(66,76,100,.72)!important;
+  border-radius:10px!important;
+  background:rgba(17,21,30,.88)!important;
+  box-shadow:0 5px 18px rgba(0,0,0,.24);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  pointer-events:auto!important;
+  z-index:94;
+  font-size:24px!important;
+  line-height:1!important;
+}
+.editor.topBarCollapsed #openExport{
+  left:auto!important;
+  right:0!important;
+  top:0!important;
+  bottom:auto!important;
+  inset:auto 0 auto auto!important;
+}
+/* Floating + stays the normal layer button even while the header is hidden. */
+.editor.topBarCollapsed #plusBtn{
+  background:#17221f!important;
+  border-color:var(--accent)!important;
+  color:var(--accent)!important;
+}
+.editor.topBarCollapsed #plusBtn::after{display:none!important}
+@media (min-width:900px){
+  .editor.topBarCollapsed .editorTop .topActions{width:82px!important}
+}
+
+/* ==================== oms-v403-compact-top-controls-badge-reset-plus ==================== */
+/* =========================================================
+   V4.03 — compact collapsed-header controls + transient mode badge.
+   - The green Add Layer + returns to its original timeline position and can
+     be covered by drawers/Inspector again.
+   - Collapsed-header restore + and Export are 30% smaller (38px -> 27px).
+   - 2D COMPOSITE sits to the left of those controls while they are pinned.
+   ========================================================= */
+.editor #plusBtn,
+.editor.topBarCollapsed #plusBtn,
+.editor.drawerOverlayOpen #plusBtn,
+.editor.topBarCollapsed.drawerOverlayOpen #plusBtn,
+.editor.topBarCollapsed:not(.drawerOverlayOpen) #plusBtn{
+  position:absolute!important;
+  right:10px!important;
+  top:auto!important;
+  bottom:12px!important;
+  z-index:20!important;
+  transform:none!important;
+}
+
+.editor.topBarCollapsed .editorTop .topActions{
+  top:8px!important;
+  right:8px!important;
+  width:58px!important;
+  height:27px!important;
+}
+.editor.topBarCollapsed #restoreEditorTop{
+  left:0!important;
+  top:0!important;
+  width:27px!important;
+  height:27px!important;
+  border-radius:8px!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+.editor.topBarCollapsed #openExport{
+  right:0!important;
+  top:0!important;
+  width:27px!important;
+  height:27px!important;
+  border-radius:8px!important;
+  font-size:14px!important;
+  line-height:1!important;
+}
+.editor.topBarCollapsed #modeBadge{
+  top:8px!important;
+  right:74px!important;
+  max-width:calc(100% - 154px);
+  white-space:nowrap;
+}
+
+@media (min-width:900px){
+  .editor #plusBtn,
+  .editor.topBarCollapsed #plusBtn,
+  .editor.drawerOverlayOpen #plusBtn,
+  .editor.topBarCollapsed.drawerOverlayOpen #plusBtn,
+  .editor.topBarCollapsed:not(.drawerOverlayOpen) #plusBtn{right:20px!important}
+  .editor.topBarCollapsed .editorTop .topActions{top:10px!important;right:12px!important;width:58px!important;height:27px!important}
+  .editor.topBarCollapsed #modeBadge{top:10px!important;right:82px!important}
+}
+
+/* V5.33 — compact persistent PWA install action in the Home header.
+   Chrome still controls whether a native install prompt is available. */
+.simpleHome .homeInstallBtn{
+  min-width:58px;
+  padding:0 10px;
+  justify-content:center;
+  border-color:#bfeadd;
+  background:#effbf7;
+  color:#25866b;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.055em;
+}
+.simpleHome .homeInstallBtn.ready{
+  border-color:#6edbbb;
+  background:#73e2bd;
+  color:#071b17;
+}
+.simpleHome .homeInstallBtn:active{background:#dff7ee}
+.simpleHome .homeInstallBtn.ready:active{background:#62d4ae}
+.simpleHome .homeInstallBtn[aria-busy="true"]{opacity:.64;pointer-events:none}
+@media(max-width:520px){
+  .simpleHome .homeInstallBtn{min-width:52px;padding:0 7px;font-size:7.5px}
+}
+@media(max-width:390px){
+  .simpleHome .homeTopActions{gap:4px}
+  .simpleHome .homeInstallBtn{min-width:48px;padding:0 6px;font-size:7px}
+}
+@media(display-mode:standalone){
+  .simpleHome .homeInstallBtn{display:none!important}
+}
+
+
+/* ==================== omsExportResultPreviewStyles ==================== */
+/* V5.39 — temporally smoothed dual-canvas ambient preview + minimal export scrubber. */
+.exportResultPreview{position:fixed;inset:0;z-index:150000;background:#0d1220;color:#f7f8fc;display:flex;flex-direction:column;overscroll-behavior:contain;touch-action:manipulation}
+.exportResultPreview.hidden{display:none!important}
+.exportResultTop{height:70px;min-height:70px;display:flex;align-items:center;justify-content:center;position:relative;background:#151827;border-bottom:1px solid #2b3044;padding:0 max(18px,env(safe-area-inset-right)) 0 max(18px,env(safe-area-inset-left))}.exportResultTopBack{position:absolute;left:max(14px,env(safe-area-inset-left));top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 13px;border-radius:11px;border:1px solid #2c3347;background:#121724;color:#edf2fb;font-size:12px;font-weight:800;letter-spacing:.01em;box-shadow:0 4px 14px rgba(0,0,0,.18)}.exportResultTopBack:before{content:"←";font-size:16px;line-height:1;color:#cdd5ea}.exportResultTopBack:active{transform:translateY(-50%) scale(.97);background:#1b2233;border-color:#39425c}
+.exportResultTopText{min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center}.exportResultTopText small{font-size:9px;letter-spacing:.17em;color:#7f879c;font-weight:850}.exportResultTopText b{font-size:17px;line-height:1.12;color:#f6f8fd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exportResultStage{flex:1;min-height:0;display:flex;flex-direction:column;background:#0c111e}
+.exportResultMediaWrap{position:relative;isolation:isolate;flex:1;min-height:180px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#070b13}
+.exportResultAmbient{position:absolute;z-index:0;inset:-14%;width:128%;height:128%;display:block;opacity:0;filter:blur(34px) saturate(1.28) brightness(.62);transform:scale(1.10);pointer-events:none;will-change:opacity,filter,transform;transition:opacity 2400ms cubic-bezier(.22,.61,.36,1)}
+.exportResultAmbient.active{opacity:.72}
+.exportResultAmbientShade{position:absolute;z-index:1;inset:0;background:radial-gradient(circle at center,rgba(5,8,15,.06) 0%,rgba(5,8,15,.26) 56%,rgba(5,8,15,.68) 100%);pointer-events:none}
+.exportResultMediaWrap video{position:relative;z-index:2;display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;background:#000;outline:0;box-shadow:0 18px 54px rgba(0,0,0,.34)}
+.exportResultControls{height:72px;min-height:72px;display:grid;grid-template-columns:42px 1fr auto 42px;gap:10px;align-items:center;padding:0 max(18px,env(safe-area-inset-left)) 0 max(18px,env(safe-area-inset-right));background:#0c111e;border-top:1px solid rgba(255,255,255,.035)}
+.exportResultPlay{width:36px;height:36px;border:1px solid #293043;background:#151a29;color:#f1f3f8;display:grid;place-items:center;border-radius:10px;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.exportResultPlay:active{transform:scale(.96);background:#202638}.exportResultPlay svg{width:19px;height:19px;fill:currentColor}
+.exportResultSeekWrap{--seek-progress:0%;position:relative;height:34px;min-width:0;display:flex;align-items:center;touch-action:none}
+.exportResultSeekTrack{position:absolute;left:0;right:0;top:50%;height:4px;transform:translateY(-50%);overflow:hidden;pointer-events:none;background:#2b3244;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.025)}
+.exportResultSeekTrack:before{content:"";position:absolute;left:0;top:0;bottom:0;width:var(--seek-progress);background:var(--accent);border-radius:inherit;opacity:.9}
+.exportResultSeekTrack:after{display:none}
+.exportResultSeek{position:absolute;inset:0;width:100%;height:34px;margin:0;opacity:0;cursor:pointer;touch-action:none}
+.exportResultTime{font-size:9px;color:#b8c0d3;background:#111622;border:1px solid #2b3246;border-radius:7px;padding:5px 8px;font-variant-numeric:tabular-nums;white-space:nowrap;min-width:78px;text-align:center}
+.exportResultFullscreen{width:36px;height:36px;border:1px solid #293043;background:#151a29;color:#f1f3f8;display:grid;place-items:center;border-radius:10px;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.exportResultFullscreen:active{transform:scale(.96);background:#202638}.exportResultFullscreen svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* V5.76 — true fullscreen: media uses 100% of the viewport and controls float above it. */
+#exportResultStage:fullscreen,#exportResultStage:-webkit-full-screen{position:relative!important;width:100vw!important;height:100vh!important;max-width:none!important;overflow:hidden!important;background:#05070c!important}
+#exportResultStage:fullscreen .exportResultMediaWrap,#exportResultStage:-webkit-full-screen .exportResultMediaWrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
+#exportResultStage:fullscreen .exportResultMediaWrap video,#exportResultStage:-webkit-full-screen .exportResultMediaWrap video{width:auto!important;height:auto!important;max-width:100vw!important;max-height:100vh!important;object-fit:contain!important}
+#exportResultStage:fullscreen .exportResultControls,#exportResultStage:-webkit-full-screen .exportResultControls{position:absolute!important;z-index:20!important;left:0!important;right:0!important;bottom:0!important;height:78px!important;min-height:78px!important;padding:14px max(18px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))!important;background:linear-gradient(to top,rgba(4,7,13,.94) 0%,rgba(4,7,13,.74) 58%,rgba(4,7,13,0) 100%)!important;border-top:0!important;opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition:opacity .18s ease,transform .18s ease,visibility 0s linear 0s}
+#exportResultStage:fullscreen.fsControlsHidden .exportResultControls,#exportResultStage:-webkit-full-screen.fsControlsHidden .exportResultControls{opacity:0!important;transform:translateY(14px)!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .18s ease,transform .18s ease,visibility 0s linear .18s!important}
+#exportResultStage:fullscreen.fsControlsHidden,#exportResultStage:-webkit-full-screen.fsControlsHidden{cursor:none!important}
+#exportResultStage:fullscreen.fsControlsVisible,#exportResultStage:-webkit-full-screen.fsControlsVisible{cursor:default!important}
+@media (hover:none),(pointer:coarse){#exportResultStage:fullscreen,#exportResultStage:-webkit-full-screen{cursor:default!important}}
+/* V5.116 — mobile app-controlled fullscreen; avoids browser-owned education banner. */
+body.omsExportPseudoFullscreen{overflow:hidden!important;overscroll-behavior:none!important}
+#exportResultStage.omsPseudoFullscreen{position:fixed!important;inset:0!important;z-index:100050!important;width:100vw!important;height:100vh!important;height:100dvh!important;max-width:none!important;overflow:hidden!important;background:#05070c!important;margin:0!important;border-radius:0!important}
+#exportResultStage.omsPseudoFullscreen.omsPseudoLandscape{inset:auto!important;left:50%!important;top:50%!important;width:100vh!important;width:100dvh!important;height:100vw!important;transform:translate(-50%,-50%) rotate(90deg)!important;transform-origin:center center!important}
+#exportResultStage.omsPseudoFullscreen .exportResultMediaWrap{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
+#exportResultStage.omsPseudoFullscreen .exportResultMediaWrap video{width:auto!important;height:auto!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important}
+#exportResultStage.omsPseudoFullscreen .exportResultControls{position:absolute!important;z-index:20!important;left:0!important;right:0!important;bottom:0!important;height:78px!important;min-height:78px!important;padding:14px max(18px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left))!important;background:linear-gradient(to top,rgba(4,7,13,.94) 0%,rgba(4,7,13,.74) 58%,rgba(4,7,13,0) 100%)!important;border-top:0!important;opacity:1;transform:translateY(0);visibility:visible;pointer-events:auto;transition:opacity .18s ease,transform .18s ease,visibility 0s linear 0s}
+#exportResultStage.omsPseudoFullscreen.fsControlsHidden .exportResultControls{opacity:0!important;transform:translateY(14px)!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .18s ease,transform .18s ease,visibility 0s linear .18s!important}
+#exportResultStage.omsPseudoFullscreen.fsControlsHidden{cursor:none!important}
+#exportResultStage.omsPseudoFullscreen.fsControlsVisible{cursor:default!important}
+@media (hover:none),(pointer:coarse){#exportResultStage.omsPseudoFullscreen{cursor:default!important}}
+
+.exportResultBottom{background:#151827;padding:20px max(20px,env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));border-top:1px solid #2b3044}
+.exportResultActions{display:grid;grid-template-columns:1.15fr .85fr;gap:10px;max-width:760px;margin:0 auto}
+.exportResultAction{height:68px;border-radius:14px;font-size:15px;font-weight:850;display:flex;align-items:center;justify-content:center;gap:10px;padding:0 15px;transition:transform .12s ease,background .12s ease,border-color .12s ease}
+#exportResultSave{border:1px solid rgba(0,215,167,.35);background:var(--accent);color:#06251e;box-shadow:0 8px 24px rgba(0,215,167,.14)}
+#exportResultShare{border:1px solid #343b50;background:#202538;color:#f4f6fb}
+.exportResultAction:active{transform:scale(.975)}#exportResultSave:active{background:#16e0b2}#exportResultShare:active{background:#292f44}
+.exportResultAction svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.exportResultClose{display:flex;align-items:center;justify-content:center;gap:7px;margin:12px auto 0;border:1px solid transparent;background:transparent;color:#aeb6c9;font-size:11px;font-weight:800;letter-spacing:.015em;padding:8px 14px;border-radius:9px}
+.exportResultClose:before{content:"×";font-size:17px;line-height:1;color:#7f879c}.exportResultClose:active{background:#202538;color:#fff;border-color:#30374c}
+.exportResultMeta{max-width:760px;margin:0 auto 10px;text-align:center;color:#8f98ad;font-size:10px;min-height:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exportResultPreview[data-share-supported="false"] #exportResultShare{opacity:.58}
+@media (orientation:landscape) and (max-height:650px){.exportResultTop{height:56px;min-height:56px}.exportResultTopBack{height:34px;padding:0 11px;border-radius:10px;font-size:11px}.exportResultTopText b{font-size:14px}.exportResultTopText small{font-size:8px}.exportResultControls{height:56px;min-height:56px}.exportResultAmbient{filter:blur(26px) saturate(1.22) brightness(.6)}.exportResultBottom{padding-top:12px;padding-bottom:calc(10px + env(safe-area-inset-bottom))}.exportResultAction{height:54px;font-size:14px;border-radius:12px}.exportResultAction svg{width:21px;height:21px}.exportResultClose{margin-top:6px;padding:6px 12px}.exportResultMeta{margin-bottom:6px}}
+@media (min-width:900px){.exportResultPreview{background:#101522}.exportResultStage{width:min(1100px,100%);align-self:center}.exportResultBottom{padding-left:max(24px,calc((100vw - 900px)/2));padding-right:max(24px,calc((100vw - 900px)/2))}.exportResultAction{height:64px}}
+@media (prefers-reduced-motion:reduce){.exportResultAmbient{filter:blur(28px) saturate(1.12) brightness(.58)}}
+
+/* ==================== oms-editor-ambient-v540 ==================== */
+/* V5.209 — Fixed-count ambient surfaces. Only plate opacity interpolates;
+   no animated inherited colors, per-track backgrounds, filters or shadows. */
+.omsEditorAmbientHost{isolation:isolate}
+.omsEditorAmbientSurface{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;
+  display:none;overflow:hidden;contain:paint;
+}
+.editor.editorAmbientEnabled .omsEditorAmbientSurface{display:block}
+.omsEditorAmbientPlate{
+  position:absolute;inset:0;opacity:0;pointer-events:none;
+  background-repeat:no-repeat;background-size:100% 100%;contain:paint;
+  transition:opacity 1800ms cubic-bezier(.22,.61,.36,1);
+}
+.omsEditorAmbientSurface.isFading .omsEditorAmbientPlate{will-change:opacity}
+.omsEditorAmbientSurface.ambientImmediate .omsEditorAmbientPlate{transition:none}
+@media (prefers-reduced-motion:reduce){.omsEditorAmbientPlate{transition:none}}
+/* Neutral base surfaces and every track/card/clip retain the normal skin.
+   The two noninteractive glow hosts are behind preview and timeline content. */
+.editor.editorAmbientEnabled .viewport{
+  background-image:
+    linear-gradient(45deg,rgba(255,255,255,.014) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.014) 75%),
+    linear-gradient(45deg,rgba(255,255,255,.014) 25%,transparent 25%,transparent 75%,rgba(255,255,255,.014) 75%);
+  background-position:0 0,8px 8px;background-size:16px 16px,16px 16px;
+}
+
+
+/* ==================== oms-v586-vector-mobile-override ==================== */
+.addHubBody .mediaDrop .vectorPenLaunch{height:auto!important;min-height:70px!important;width:min(520px,100%)!important;margin:4px auto!important;padding:9px 10px!important;border-radius:12px!important;display:grid!important;grid-template-columns:46px minmax(0,1fr) auto!important;gap:9px!important;font-size:inherit!important;overflow:visible!important}
+.addHubBody .mediaDrop .vectorPenLaunchIcon{width:40px!important;height:40px!important;font-size:22px!important}
+.addHubBody .mediaDrop .vectorPenLaunchCopy{display:flex!important;align-items:flex-start!important;justify-content:center!important;gap:2px!important;overflow:hidden!important}
+.addHubBody .mediaDrop .vectorPenLaunchCopy b{font-size:10px!important;line-height:1.15!important}
+.addHubBody .mediaDrop .vectorPenLaunchCopy small{font-size:7.5px!important;line-height:1.25!important;white-space:normal!important}
+.addHubBody .mediaDrop .vectorPenLaunchArrow{font-size:20px!important}
+@media(max-width:700px){.vectorPenTouchpadDock{left:8px;right:8px;bottom:max(7px,env(safe-area-inset-bottom));height:clamp(155px,23vh,205px);height:clamp(155px,23dvh,205px)}.vectorPenTouchpad{margin:6px}.vectorPenTouchpadHint{font-size:9px;padding:14px}}
+.vectorPenHud,.vectorPenHint{display:none!important}
+/* V5.88 — Edit Points rails inspired by the supplied reference. */
+.vectorPenTouchpadDock.vectorEditPoints{grid-template-columns:58px minmax(0,1fr) 78px;grid-template-rows:32px minmax(0,1fr)}
+.vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead{grid-column:1/-1;grid-row:1}
+.vectorPenLeftRail{grid-column:1;grid-row:2;display:grid;grid-template-rows:repeat(5,1fr);gap:4px;padding:7px 4px 7px 6px;border-right:1px solid #30384d;background:rgba(12,16,26,.42)}
+.vectorPenRailBtn{position:relative;min-height:0;border:1px solid transparent;border-radius:10px;background:transparent;color:#b7c1d4;font-size:20px;display:grid;place-items:center;padding:0;touch-action:manipulation}
+.vectorPenRailBtn small{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);font-size:6.5px;letter-spacing:.02em;color:#6f7a91;white-space:nowrap}
+.vectorPenRailBtn:active,.vectorPenRailBtn.active{background:rgba(0,215,167,.10);border-color:rgba(0,215,167,.45);color:#72ead1}
+.vectorPenRailBtn:disabled{opacity:.27;filter:saturate(.3)}
+.vectorPenRailBtn.pointAction{font-size:28px}.vectorPenRailBtn.pointAction.delete{color:#ff91a6;border-color:rgba(255,85,116,.42);background:rgba(255,85,116,.08)}
+.vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpad{grid-column:2;grid-row:2;margin:7px}
+.vectorPenEditPad{position:relative;grid-column:3;grid-row:2;margin:7px 6px 7px 2px;border:1px solid #313b52;border-radius:11px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;background:#151a27}.vectorPenEditPad:before{content:"";position:absolute;z-index:2;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(21,26,39,.82) 0,rgba(21,26,39,0) 13%,rgba(21,26,39,0) 87%,rgba(21,26,39,.82) 100%)}
+.vectorPenEditPad canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.vectorPenEditPad:after{content:"POINTS";position:absolute;top:5px;left:50%;transform:translateX(-50%);font-size:6.5px;font-weight:900;letter-spacing:.13em;color:#69748a;pointer-events:none}
+/* V5.90: the gray circle in the reference was the user's finger, not UI. The rail itself shows only the path-order line, anchors, and the small green navigator. */
+.vectorPenEditPointer{display:none!important}
+.vectorPenEditPad.targeting{border-color:rgba(45,226,189,.42)}
+.vectorPenEditPad.handleTarget{border-color:rgba(255,143,165,.42)}
+.vectorPenEditPadHint{position:absolute;left:50%;bottom:5px;transform:translateX(-50%);font-size:6px;color:#69748a;white-space:nowrap;pointer-events:none}
+.vectorPenSelectionBadge{position:absolute;z-index:96;right:8px;top:8px;padding:5px 7px;border-radius:8px;border:1px solid rgba(45,226,189,.34);background:rgba(12,16,26,.84);font-size:8px;color:#9da9be;pointer-events:none}.vectorPenSelectionBadge b{color:#72ead1}
+@media(max-width:700px){.vectorPenTouchpadDock.vectorEditPoints{grid-template-columns:52px minmax(0,1fr) 68px;height:clamp(165px,25vh,220px);height:clamp(165px,25dvh,220px)}.vectorPenLeftRail{padding-left:4px}.vectorPenRailBtn{font-size:18px}.vectorPenRailBtn.pointAction{font-size:25px}.vectorPenEditPad{margin-right:4px}.vectorPenSelectionBadge{font-size:7px}}
+
+
+/* ==================== oms-effects-stack-v5124 ==================== */
+/* V5.124 — Effect Stack UI keeps Open Motion's existing drawer language. */
+.effectsDrawer .drawerBody{padding:8px;overflow:auto}
+.effectStackPanel{display:flex;flex-direction:column;gap:8px;min-height:100%}
+.effectStackEmpty{min-height:112px;border:1px dashed #354058;border-radius:11px;background:#171b29;display:grid;place-items:center;text-align:center;padding:18px;color:#7f8aa1}
+.effectStackEmpty span{display:block;font-size:22px;color:#55627a;margin-bottom:6px}.effectStackEmpty b{display:block;color:#cfd6e4;font-size:10px}.effectStackEmpty small{display:block;margin-top:4px;font-size:7.5px;line-height:1.4}
+.effectStackList{display:grid;gap:7px}
+.effectCard{border:1px solid #30384d;border-radius:10px;background:#1d2232;overflow:hidden;transition:border-color .12s,opacity .12s,transform .12s}
+.effectCard.dragging{opacity:.94;border-color:var(--accent);box-shadow:0 10px 24px rgba(0,0,0,.34);z-index:8}
+/* V5.130 — timeline-layer-style animated effect reorder. */
+.effectCard{--effect-reorder-shift-y:0px;--effect-reorder-drag-y:0px;position:relative}
+.effectCard.effect-reorder-shift{
+  transform:translate3d(0,var(--effect-reorder-shift-y),0);
+  transition:transform .17s cubic-bezier(.2,.78,.24,1),border-color .12s,opacity .12s;
+  will-change:transform;
+}
+.effectCard.effect-reorder-source{
+  z-index:12;
+  transform:translate3d(0,var(--effect-reorder-drag-y),0) scale(.995);
+  transition:transform .045s linear,border-color .12s,opacity .12s;
+  will-change:transform;
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.30));
+}
+.effectCard.effect-reorder-hover{border-color:rgba(0,215,167,.58)}
+.effectCard.effect-reorder-target-before::before,
+.effectCard.effect-reorder-target-after::after{
+  content:"";position:absolute;left:5px;right:5px;height:1.5px;background:var(--accent);
+  z-index:20;pointer-events:none;box-shadow:0 0 8px rgba(0,215,167,.48);opacity:.86
+}
+.effectCard.effect-reorder-target-before::before{top:-1px}
+.effectCard.effect-reorder-target-after::after{bottom:-1px}
+.effectCard.disabledEffect{opacity:.62}
+.effectCardHead{height:40px;display:grid;grid-template-columns:30px minmax(0,1fr) 32px 32px 32px 32px;align-items:center;border-bottom:1px solid transparent}
+.effectCard.expanded .effectCardHead{border-bottom-color:#2d3548}
+.effectDragHandle,.effectHeadBtn{height:100%;border:0;background:transparent;color:#8d98ae;display:grid;place-items:center;padding:0;touch-action:none;-webkit-user-select:none;user-select:none}
+.effectDragHandle{font-size:15px;cursor:grab}.effectDragHandle:active{cursor:grabbing;color:var(--accent)}
+.effectHeadBtn{font-size:14px}.effectHeadBtn:active{background:#252c40}.effectHeadBtn.bypassOff{color:#596276}.effectHeadBtn.delete{color:#ff8197}.effectHeadBtn.chevron{font-size:17px;transition:transform .12s}.effectCard.expanded .effectHeadBtn.chevron{transform:rotate(90deg)}
+/* V5.128 — effect overflow/context surfaces live outside the drawer so drawer overflow cannot clip them. */
+.effectHeadBtn.more{font-size:19px;line-height:1;letter-spacing:1px}
+.effectHeadBtn.more[aria-expanded="true"]{color:var(--accent);background:#252c40}
+.effectContextShade{position:fixed;inset:0;z-index:100120;background:rgba(5,8,14,.18);touch-action:none}
+.effectContextMenu{position:fixed;width:min(232px,calc(100vw - 16px));padding:6px;border:1px solid #3a4359;border-radius:12px;background:#1b2030;color:#e6ebf5;box-shadow:0 16px 42px rgba(0,0,0,.48);display:grid;gap:2px;touch-action:manipulation}
+.effectContextMenu button{min-height:40px;border:0;border-radius:8px;background:transparent;color:#dbe2ef;display:grid;grid-template-columns:27px minmax(0,1fr);align-items:center;text-align:left;padding:0 9px;font-size:9px}
+.effectContextMenu button:active{background:#252c40}.effectContextMenu button .effectMenuIcon{font-size:14px;color:#8d9ab1;text-align:center}.effectContextMenu button.danger{color:#ff9caf}
+.effectDetailShade{position:fixed;inset:0;z-index:100130;background:rgba(4,6,11,.68);display:flex;align-items:flex-end;justify-content:center;padding:10px max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));touch-action:none}
+.effectDetailCard{width:min(520px,100%);max-height:78vh;max-height:78dvh;overflow:auto;border:1px solid #3a4359;border-radius:15px;background:#1b2030;color:#e6ebf5;box-shadow:0 18px 50px rgba(0,0,0,.55);padding:12px;touch-action:pan-y}
+.effectDetailHead{display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid #30384c;padding:2px 2px 10px}.effectDetailHeadText{min-width:0;flex:1}.effectDetailHeadText b{display:block;font-size:13px}.effectDetailHeadText small{display:block;color:#7f8ba2;font-size:7px;margin-top:3px}.effectDetailClose{width:32px;height:32px;border:0;border-radius:8px;background:#252b3c;color:#cbd3e1;font-size:20px}
+.effectDetailGrid{display:grid;grid-template-columns:92px minmax(0,1fr);gap:7px 9px;padding:11px 2px 4px;font-size:8px}.effectDetailGrid span{color:#7f8ba2}.effectDetailGrid b{font-weight:700;color:#dce3ef;overflow-wrap:anywhere}.effectDetailParams{margin-top:9px;border-top:1px solid #30384c;padding-top:9px}.effectDetailParams>small{display:block;color:#7f8ba2;font-size:7px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.07em}.effectDetailParamList{display:flex;flex-wrap:wrap;gap:5px}.effectDetailParamList i{font-style:normal;border:1px solid #343d52;border-radius:999px;background:#202638;color:#aeb7c9;padding:4px 7px;font-size:7px}
+@media(min-width:900px){.effectDetailShade{align-items:center}.effectDetailCard{border-radius:15px}}
+
+.effectCardTitle{min-width:0;padding:0 5px}.effectCardTitle b{display:block;color:#e7ebf4;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.effectCardTitle small{display:block;color:#748198;font-size:6.8px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.effectCardTitle small.live{color:#6ce2c6}
+.effectParams{display:none;padding:7px;background:#181d2b}.effectCard.expanded .effectParams{display:grid;gap:7px}
+.effectParamGroup{display:grid;gap:6px}.effectParamGroupTitle{font-size:6.8px;color:#7f8ca3;text-transform:uppercase;letter-spacing:.08em;padding:3px 1px 0;font-weight:850}.effectParamConditionalHidden,.effectParamGroupConditionalHidden{display:none!important}
+.effectParamRow{display:grid;grid-template-columns:minmax(74px,.8fr) minmax(90px,1.25fr) 54px 28px;gap:6px;align-items:center;min-height:31px}
+.effectParamRow.bool{grid-template-columns:minmax(0,1fr) 46px 28px}
+.effectParamLabel{min-width:0;color:#aeb7c9;font-size:7.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.effectParamRange{width:100%;min-width:0;margin:0;touch-action:none;accent-color:var(--accent)}.effectParamRangeHidden{display:none!important}.effectParamRulerShell{position:relative;width:100%;min-width:0;height:27px;border:1px solid #353e53;background:#151c29;border-radius:999px;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;cursor:ew-resize}.effectParamRulerShell.active,.effectParamRulerShell:focus-visible{border-color:rgba(0,215,167,.8);box-shadow:0 0 0 1px rgba(0,215,167,.18) inset,0 0 0 1px rgba(0,215,167,.12)}.effectParamRulerViewport{position:absolute;inset:0;overflow:hidden;border-radius:999px}.effectParamRulerContent{position:absolute;top:0;bottom:0;left:0;width:var(--effect-ruler-content-width,1920px);will-change:transform}.effectParamRulerMinor,.effectParamRulerMajor{position:absolute;inset:0;pointer-events:none}.effectParamRulerMinor{background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--effect-ruler-spacing,12px) - 1px),rgba(191,199,215,.22) calc(var(--effect-ruler-spacing,12px) - 1px) var(--effect-ruler-spacing,12px))}.effectParamRulerMajor{background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--effect-ruler-major-spacing,60px) - 2px),rgba(214,220,235,.38) calc(var(--effect-ruler-major-spacing,60px) - 2px) var(--effect-ruler-major-spacing,60px))}.effectParamRulerDefault{position:absolute;top:3px;bottom:3px;width:6px;border-radius:999px;background:#eef2fb;box-shadow:0 0 6px rgba(255,255,255,.18)}.effectParamRulerPlayhead{position:absolute;left:50%;top:0;bottom:0;width:4px;margin-left:-2px;border-radius:999px;background:var(--accent);box-shadow:0 0 8px rgba(0,215,167,.42)}.effectParamRulerShine{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.06),transparent 30%,transparent 70%,rgba(255,255,255,.03));pointer-events:none}.effectParamNumber{width:100%;height:27px;border:1px solid #353e53;background:#111620;border-radius:6px;color:#dbe2ef;text-align:center;padding:0 4px;font-size:8px;font-variant-numeric:tabular-nums}.effectParamNumber:focus{border-color:var(--accent)}
+.effectParamKey{width:27px;height:27px;border:1px solid #384258;background:#202638;border-radius:6px;color:#77849c;padding:0}.effectParamKey.on{border-color:#ff6da9;color:#ff6da9;background:#2a2030}
+.effectBoolToggle{justify-self:end;width:40px;height:22px;appearance:none;border-radius:999px;border:1px solid #39445a;background:#171c28;position:relative;transition:.15s}.effectBoolToggle:before{content:"";position:absolute;width:16px;height:16px;left:2px;top:2px;border-radius:50%;background:#778298;transition:.15s}.effectBoolToggle:checked{background:#17322e;border-color:#2b7566}.effectBoolToggle:checked:before{left:20px;background:var(--accent)}.effectParamRow.enum{grid-template-columns:minmax(0,1fr) minmax(110px,1.15fr) 28px}.effectEnumSelect{width:100%;min-width:0;height:28px;border:1px solid #353e53;background:#111620;color:#dbe2ef;border-radius:6px;padding:0 24px 0 8px;font-size:8px;font-weight:700;outline:none}.effectEnumSelect:focus{border-color:var(--accent)}
+.effectAddBtn{width:100%;height:38px;border:1px solid rgba(0,215,167,.48);border-radius:9px;background:#1c302f;color:#78ead0;font-weight:850;font-size:9px}.effectAddBtn:active{background:#21403b}.effectAddBtn span{font-size:15px;margin-right:5px;vertical-align:-1px}
+.effectStackNote{font-size:7px;line-height:1.45;color:#6f7b92;padding:0 2px 3px}
+
+/* V5.131 — Effect workspace side rail mirrors the compact action language of Transform. */
+.effectsDrawer .effectWorkspace{
+  flex:1 1 auto;
+  display:grid!important;
+  grid-template-columns:44px minmax(0,1fr)!important;
+  min-height:0!important;
+  height:100%;
+  padding:0!important;
+  overflow:hidden!important;
+}
+.effectSideRail{
+  min-height:0;
+  border-right:1px solid #30384d;
+  background:#151927;
+  display:grid;
+  grid-template-rows:58px 58px 1fr;
+  align-content:start;
+}
+.effectSideBtn{
+  min-width:0;
+  min-height:0;
+  border:0;
+  border-bottom:1px solid #2c3347;
+  background:transparent;
+  color:#8f9bb0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  padding:2px 1px;
+  touch-action:manipulation;
+  -webkit-user-select:none;
+  user-select:none;
+}
+.effectSideBtn:active{background:#202638;color:#dce4f3}
+.effectSideBtn:disabled{opacity:.34;pointer-events:none}
+.effectSideBtn.active{color:var(--accent);background:#1d2d31;box-shadow:inset 3px 0 0 var(--accent)}
+.effectSideBtn .effectRailLabel{font-size:6px;font-weight:850;letter-spacing:.05em}
+.effectSideBtn .effectRailValue{font-size:9px;font-weight:850;color:#eef3ff;line-height:1.05;max-width:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.effectSideBtn .effectRailSub{font-size:5px;color:#718097;line-height:1.05;max-width:40px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.effectPasteGlyph{font-size:22px;line-height:.7;letter-spacing:1px;color:#d8deeb}
+.effectPasteSide:not(:disabled) .effectPasteGlyph{color:var(--accent)}
+.effectsDrawer .effectStackPanel{
+  min-width:0;
+  min-height:0;
+  height:100%;
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding:8px;
+  align-content:start;
+}
+.effectCard.activeEffectCard{border-color:rgba(0,215,167,.46);box-shadow:inset 0 0 0 1px rgba(0,215,167,.06)}
+.effectParamRow.activeEffectParam{background:rgba(0,215,167,.055);border-radius:6px;box-shadow:inset 2px 0 0 rgba(0,215,167,.55)}
+.effectEaseMain{display:grid;grid-template-columns:minmax(0,1fr) 60px;min-height:235px;height:100%;border:1px solid #30384d;border-radius:9px;overflow:hidden;background:#171b29}
+.effectEaseMain .effectEaseEditorWrap{min-width:0;min-height:0;padding:7px}
+.effectEaseMain .easePresetRail{border-left:1px solid #30384d}
+.effectEaseContext{font-size:6px;color:#6f7b92;margin-top:-2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* V5.133 — Effect Easing uses the same compact, non-scrolling geometry as Transform Easing. */
+.effectCardHead{cursor:pointer}
+.effectCardHead .effectDragHandle,.effectCardHead .effectHeadBtn{cursor:pointer}
+.drawer.effectEaseDrawer{height:66%;max-height:66%;overflow:hidden}
+.drawer.effectEaseDrawer .drawerHead{height:34px;min-height:34px;padding:0 7px}
+.drawer.effectEaseDrawer .drawerHead b{font-size:11px}
+.drawer.effectEaseDrawer .drawerHead button{font-size:15px}
+.drawer.effectEaseDrawer .drawerBody.effectWorkspace{flex:1;min-height:0;height:auto;overflow:hidden!important}
+.drawer.effectEaseDrawer .effectStackPanel{height:100%;min-height:0;overflow:hidden!important;padding:4px!important;padding-bottom:4px!important;gap:0}
+.drawer.effectEaseDrawer .effectEaseMain{height:100%;min-height:0;grid-template-columns:minmax(0,1fr) 54px}
+.drawer.effectEaseDrawer .effectEaseEditorWrap{height:100%;min-height:0;padding:4px;overflow:hidden;display:flex}
+.drawer.effectEaseDrawer .easeEditor{height:100%;min-height:0;gap:3px}
+.drawer.effectEaseDrawer .easeEditorHead{min-height:18px}
+.drawer.effectEaseDrawer .easeEditorHead b{font-size:7px}
+.drawer.effectEaseDrawer .easeEditorHead small{font-size:5px}
+.drawer.effectEaseDrawer .effectEaseContext{font-size:5px;margin:0}
+.drawer.effectEaseDrawer .easeGraphWrap{
+  flex:0 1 auto!important;
+  width:min(100%,310px)!important;
+  aspect-ratio:1 / 1!important;
+  min-height:0!important;
+  height:auto!important;
+  max-height:min(38vh,310px)!important;
+  max-height:min(38dvh,310px)!important;
+  align-self:center
+}
+.drawer.effectEaseDrawer #effectEaseGraph{width:100%!important;height:100%!important}
+.drawer.effectEaseDrawer .easeParamGrid{gap:2px}
+.drawer.effectEaseDrawer .easeParam{padding:1px 2px}
+.drawer.effectEaseDrawer .easeParam span{font-size:5px}
+.drawer.effectEaseDrawer .easeParam input{height:16px;font-size:6.5px}
+.drawer.effectEaseDrawer .easeEditorFoot{gap:2px}
+.drawer.effectEaseDrawer .easeEditorFoot button{height:18px;font-size:5.5px}
+.drawer.effectEaseDrawer .easePresetRail{grid-template-rows:repeat(7,minmax(0,1fr))}
+.drawer.effectEaseDrawer .easePresetBtn{padding:1px}
+.drawer.effectEaseDrawer .easePresetBtn svg{width:24px;height:18px}
+.drawer.effectEaseDrawer .easePresetBtn small{font-size:4px}
+.drawer.effectEaseDrawer .easeSpringPanel{gap:3px;padding:2px}
+.drawer.effectEaseDrawer .easeSpringRow{grid-template-columns:46px 1fr 36px;gap:3px;font-size:6px}
+.drawer.effectEaseDrawer .easeSpringRow input[type="number"]{height:18px;font-size:6.5px}
+.drawer.effectEaseDrawer .easeHoldPanel{padding:7px;font-size:7px}
+.drawer.effectEaseDrawer .easeHoldPanel b{font-size:11px;margin-bottom:3px}
+.drawer.effectEaseDrawer .easeNoKey{padding:8px;font-size:7px}
+.drawer.effectEaseDrawer .easeNoKey b{font-size:9px;margin-bottom:3px}
+@media(max-width:820px){
+  .drawer.effectEaseDrawer{height:76%!important;max-height:76%!important}
+}
+@media(max-width:420px){
+  .drawer.effectEaseDrawer .effectEaseMain{grid-template-columns:minmax(0,1fr) 48px}
+}
+@media(max-width:390px){
+  .effectsDrawer .effectWorkspace{grid-template-columns:40px minmax(0,1fr)!important}
+  .effectSideRail{grid-template-rows:54px 54px 1fr}
+  .effectEaseMain{grid-template-columns:minmax(0,1fr) 54px}
+  .drawer.effectEaseDrawer .effectEaseMain{grid-template-columns:minmax(0,1fr) 48px}
+}
+
+.effectsBrowserDrawer .drawerBody{padding:8px;overflow:auto;overscroll-behavior:contain;scroll-padding-bottom:84px}
+.effectsBrowserDrawer .effectBrowser{padding-bottom:calc(72px + env(safe-area-inset-bottom));min-height:min-content}
+.effectsDrawer .effectStackPanel{padding-bottom:calc(18px + env(safe-area-inset-bottom))}
+.effectDragHandle,.effectHeadBtn{position:relative;z-index:2;pointer-events:auto;-webkit-tap-highlight-color:transparent}
+@media(min-width:900px){.effectsBrowserDrawer .effectBrowser{padding-bottom:12px}.effectsBrowserDrawer .drawerBody{scroll-padding-bottom:12px}}
+.effectBrowser{display:grid;grid-auto-rows:max-content;align-content:start;gap:9px}
+.effectSearchWrap{position:relative}.effectSearchIcon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--accent);font-size:13px;pointer-events:none}.effectSearch{width:100%;height:36px;border:1px solid #343d52;border-radius:10px;background:#131824;color:#e6ebf5;padding:0 10px 0 31px;font-size:9px}.effectSearch:focus{border-color:#427467}
+.effectCategoryStrip{display:flex;align-items:center;gap:5px;width:100%;height:34px;min-height:34px;max-height:34px;overflow-x:auto;overflow-y:hidden;padding:2px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;white-space:nowrap}.effectCategoryStrip::-webkit-scrollbar{display:none}.effectCategoryChip{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;height:28px;min-height:28px;line-height:26px;border:1px solid #364158;border-radius:999px;background:#202638;color:#97a2b8;padding:0 10px;font-size:7.5px;font-weight:800;white-space:nowrap}.effectCategoryChip.active{border-color:var(--accent);background:#19312f;color:#7debd2}
+.effectBrowserSection{display:grid;gap:6px}.effectBrowserSection.hidden{display:none}.effectBrowserHeading{display:flex;align-items:center;justify-content:space-between;padding:2px 1px}.effectBrowserHeading b{font-size:9px;color:#dce3ef}.effectBrowserHeading small{font-size:6.5px;color:#69758c}
+.effectFeaturedGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.effectCatalogGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.effectLibraryCard{position:relative;min-width:0;min-height:58px;border:1px solid #30394e;border-radius:9px;background:#1d2333;color:#dbe2ef;padding:8px;text-align:left;overflow:hidden}.effectLibraryCard:active:not(.unavailable){border-color:var(--accent);background:#20332f}.effectLibraryCard b{display:block;font-size:8.5px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.effectLibraryCard small{display:block;font-size:6.3px;color:#7f8ba2;margin-top:4px}.effectLibraryCard .effectGlyph{display:block;font-size:18px;color:var(--accent);margin-bottom:6px;line-height:1}.effectLibraryCard.unavailable{opacity:.48}.effectLibraryCard .effectAvailability{position:absolute;right:6px;top:6px;padding:2px 5px;border-radius:999px;background:#252d3e;color:#758198;font-size:5.5px;font-weight:850}.effectLibraryCard:not(.unavailable) .effectAvailability{background:#19332e;color:#76e6cc}
+.effectBrowserNoResults{grid-column:1/-1;border:1px dashed #333c50;border-radius:9px;color:#77849b;padding:18px;text-align:center;font-size:8px}
+@media(max-width:390px){.effectCardHead{grid-template-columns:27px minmax(0,1fr) 29px 29px 29px 29px}.effectParamRow{grid-template-columns:minmax(65px,.7fr) minmax(72px,1fr) 48px 27px;gap:4px}.effectCatalogGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.effectFeaturedGrid{gap:4px}.effectLibraryCard{padding:7px;min-height:55px}}
+
+/* V5.142 — reusable effect parameter scrub-ruler component.
+   IMPORTANT: never use the generic `.ruler` class here. `.ruler` belongs to
+   Timeline and is absolutely positioned. Effect controls are fully namespaced
+   so the same component can be reused by any effect parameter safely. */
+.effectParamRulerRow{
+  display:block!important;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  min-height:96px!important;
+  padding:8px 0 11px!important;
+  margin:0 0 5px!important;
+  position:relative;
+  box-sizing:border-box;
+  border-bottom:1px solid rgba(64,75,99,.42);
+}
+.effectParamRulerRow{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
+  min-height:auto;
+  grid-template-columns:none;
+}
+.effectRulerTop{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  min-height:16px;
+  padding:0 1px;
+}
+.effectRulerTop>.effectParamLabel{
+  flex:1 1 auto;
+  min-width:0;
+  font-size:8px;
+  color:#aeb7c9;
+}
+.effectRulerMain{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  width:100%;
+  min-width:0;
+}
+.effectRulerSideControls{
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.effectRulerSideControls>.effectParamNumber{
+  width:auto;
+  min-width:46px;
+  max-width:104px;
+  height:30px;
+  padding:0 8px;
+  box-sizing:border-box;
+  font-size:8.5px;
+}
+.effectRulerSideControls>.effectParamKey{
+  width:31px;
+  height:30px;
+}
+.effectParamRulerRow>.effectRulerMain>.effectParamRulerShell{
+  flex:1 1 auto;
+  display:block;
+  width:auto;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  height:39px;
+  border:0;
+  border-top:1px solid rgba(67,78,103,.7);
+  border-bottom:1px solid rgba(67,78,103,.7);
+  border-radius:5px;
+  background:#171d2b;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(0,0,0,.18);
+}
+.effectParamRulerRow>.effectRulerMain>.effectParamRulerShell.active,
+.effectParamRulerRow>.effectRulerMain>.effectParamRulerShell:focus-visible{
+  border-top-color:rgba(0,215,167,.65);
+  border-bottom-color:rgba(0,215,167,.65);
+  box-shadow:inset 0 1px 0 rgba(0,215,167,.05),inset 0 -1px 0 rgba(0,215,167,.05);
+}
+.effectParamRulerRow .effectParamRulerViewport{border-radius:5px}
+.effectParamRulerRow .effectParamRulerDefault{
+  top:4px;
+  bottom:4px;
+  width:5px;
+  border-radius:2px;
+  background:#f2f4f9;
+  box-shadow:0 0 5px rgba(255,255,255,.14);
+}
+.effectParamRulerRow .effectParamRulerPlayhead{
+  top:0;
+  bottom:0;
+  width:4px;
+  margin-left:-2px;
+  border-radius:1px;
+  background:#65e8c7;
+  box-shadow:0 0 6px rgba(0,215,167,.34);
+}
+.effectParamRulerRow .effectParamRulerMinor{
+  background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--effect-ruler-spacing,12px) - 1px),rgba(174,184,204,.22) calc(var(--effect-ruler-spacing,12px) - 1px) var(--effect-ruler-spacing,12px));
+  top:5px;
+  bottom:5px;
+}
+.effectParamRulerRow .effectParamRulerMajor{
+  background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--effect-ruler-major-spacing,60px) - 2px),rgba(218,224,236,.46) calc(var(--effect-ruler-major-spacing,60px) - 2px) var(--effect-ruler-major-spacing,60px));
+  top:3px;
+  bottom:3px;
+}
+.effectParamRulerRow .effectParamRulerShine{
+  background:linear-gradient(180deg,rgba(255,255,255,.035),transparent 34%,transparent 72%,rgba(255,255,255,.018));
+}
+.effectParamRulerRow + .effectParamRow{
+  margin-top:2px;
+}
+
+/* ==================== oms-v5135-particular-ui ==================== */
+.effectPresetBlock{display:grid;gap:7px;padding:1px 0 4px;min-width:0}.particularPresetHead{display:flex;align-items:center;gap:7px;min-width:0}.particularPresetHeadTitle{font-size:7px;font-weight:900;letter-spacing:.12em;color:#8994aa}.particularPresetCurrent{margin-left:auto;min-width:0;max-width:68%;display:flex;align-items:center;gap:6px;height:25px;padding:0 8px;border:1px solid #344057;border-radius:8px;background:#171d2b;color:#c4cedf;font-size:7px}.particularPresetCurrent b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.particularPresetCurrent small{flex:0 0 auto;color:#78859c;font-size:6px;font-weight:800}.particularPresetCurrent.modified{border-color:#6b5c3d;background:#211f1b}.particularPresetCurrent.modified small{color:#d7b76a}.particularPresetCurrent.active{border-color:#2f7568;background:#172724}.particularPresetCurrent.active small{color:#75e0c7}.effectPresetStrip{display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:1px 1px 4px;scroll-snap-type:x proximity}.effectPresetStrip::-webkit-scrollbar{display:none}.particularPresetCard{position:relative;flex:0 0 82px;height:75px;padding:0;border:1px solid #344057;border-radius:9px;background:#191f2d;color:#aeb8ca;overflow:hidden;text-align:left;scroll-snap-align:start;touch-action:manipulation}.particularPresetCard:active{transform:scale(.985)}.particularPresetCard.active{border-color:#2d8e7c;box-shadow:inset 0 0 0 1px rgba(101,232,199,.16)}.particularPresetCard.modified{border-color:#716142}.particularPresetThumb{height:48px;display:block;background:#111722;border-bottom:1px solid rgba(67,78,103,.45);overflow:hidden}.particularPresetThumb svg{display:block;width:100%;height:100%}.particularPresetCardLabel{display:flex;align-items:center;justify-content:space-between;gap:3px;padding:5px 6px 0}.particularPresetCardLabel b{font-size:7.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.particularPresetStateDot{width:5px;height:5px;border-radius:50%;background:#536078;opacity:0}.particularPresetCard.active .particularPresetStateDot{opacity:1;background:#65e8c7;box-shadow:0 0 5px rgba(101,232,199,.55)}.particularPresetCard.modified .particularPresetStateDot{opacity:1;background:#d8b76b}.particularPresetCardMeta{display:block;padding:1px 6px 0;font-size:5.7px;color:#6f7b91;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.particularPresetCard.active .particularPresetCardMeta{color:#76bfb0}.particularPresetCard.modified .particularPresetCardMeta{color:#aa9667}
+
+/* ==================== oms-v5161-shape-studio-parity ==================== */
+/* V5.161 — the Shape Studio uses the same scrub-ruler component as Effects. */
+#drawer .drawerHead #shapePenToolHeader{
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;height:22px!important;
+  margin:0!important;padding:0 4px!important;border:0!important;border-radius:0!important;
+  background:transparent!important;color:#78ebd1!important;box-shadow:none!important;
+  font-size:8.5px!important;font-weight:800!important;line-height:1!important;letter-spacing:.01em!important;
+  white-space:nowrap!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;
+}
+#drawer .drawerHead #shapePenToolHeader:active{opacity:.65!important;transform:none!important}
+.shapeStudio .shapeStudioRow.effectParamRulerRow{
+  display:flex!important;flex-direction:column!important;gap:6px!important;
+  width:100%!important;min-width:0!important;min-height:auto!important;
+  padding:8px 0 11px!important;margin:0 0 2px!important;
+}
+.shapeStudio .shapeStudioRow.effectParamRulerRow .effectParamLabel small{
+  margin-left:4px;color:#657188;font-size:7px;font-weight:500;
+}
+.shapeStudio .shapeStudioRow.effectParamRulerRow .effectRulerMain{width:100%!important;min-width:0!important}
+.shapeStudio .shapeStudioRow.effectParamRulerRow .effectParamRulerShell{touch-action:none!important}
+.shapeStudio .shapeStudioRow.effectParamRulerRow .effectRulerSideControls>.effectParamNumber{
+  min-width:46px!important;max-width:104px!important;height:30px!important;padding:0 8px!important;font-size:8.5px!important;
+}
+
+/* ==================== oms-audio-diagnostics-v207 ==================== */
+#omsDiagAudioV207{border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin:10px 0;background:#f8fafc;color:#172033}
+#omsDiagAudioV207 h3{margin:0 0 8px;font-size:14px}#omsDiagAudioV207 p{font-size:12px;line-height:1.5;margin:8px 0}
+#omsDiagAudioV207 small{display:block;font-size:11px;line-height:1.5;color:#526480}#omsDiagAudioV207 .omsDiagMemoryActions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+#omsDiagAudioV207 button{border:1px solid #a5b4c7;border-radius:8px;background:#172033;color:#fff!important;-webkit-text-fill-color:#fff;font-size:12px;font-weight:700;padding:10px 12px;cursor:pointer}
+#omsDiagAudioV207 button:disabled{opacity:.45;cursor:default}
+
+/* ==================== oms-preview-diagnostics-v205 ==================== */
+#omsDiagPreviewV205{border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin:10px 0;background:#f8fafc;color:#172033}
+#omsDiagPreviewV205 h3{margin:0 0 8px;font-size:14px}#omsDiagPreviewV205 p{font-size:12px;line-height:1.5;margin:8px 0}
+#omsDiagPreviewV205 small{display:block;font-size:11px;line-height:1.5;color:#526480}#omsDiagPreviewV205 .omsDiagMemoryActions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+#omsDiagPreviewV205 button{border:1px solid #a5b4c7;border-radius:8px;background:#172033;color:#fff!important;-webkit-text-fill-color:#fff;font-size:12px;font-weight:700;padding:10px 12px;cursor:pointer}
+
+/* ==================== oms-v404-centered-restore-plus ==================== */
+/* =========================================================
+   V4.04 — optically centered restore + icon.
+   The Unicode full-width plus had font-dependent baseline metrics, so the
+   collapsed-header restore button now draws its + from two centered bars.
+   ========================================================= */
+.editor.topBarCollapsed #restoreEditorTop{
+  font-size:0!important;
+  line-height:0!important;
+}
+.editor.topBarCollapsed #restoreEditorTop::before,
+.editor.topBarCollapsed #restoreEditorTop::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:12px;
+  height:1.6px;
+  background:currentColor;
+  border-radius:2px;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.editor.topBarCollapsed #restoreEditorTop::after{
+  transform:translate(-50%,-50%) rotate(90deg);
+}
+
+/* ==================== oms-v411-selected-layer-focus ==================== */
+/* =========================================================
+   V4.11–V4.14 — 9:16+ automatic Inspector focus.
+   Exactly one selected track remains in layout while a drawer is open.
+   V4.14 also hard-clips the track stack to one physical row so borders or
+   fractional Android layout pixels cannot reveal a neighboring layer.
+   ========================================================= */
+.timelineArea.omsSelectedLayerFocus #tracks{
+  height:var(--oms-selected-track-height,29px)!important;
+  min-height:var(--oms-selected-track-height,29px)!important;
+  max-height:var(--oms-selected-track-height,29px)!important;
+  overflow:hidden!important;
+}
+.timelineArea.omsSelectedLayerFocus #timelineScroll{
+  overflow-y:hidden!important;
+}
+.timelineArea.omsSelectedLayerFocus #tracks .track{
+  display:none!important;
+}
+.timelineArea.omsSelectedLayerFocus #tracks .track.omsSelectedFocus{
+  display:grid!important;
+}
+.timelineArea.omsManualSelectedSticky #timelineScroll{
+  overscroll-behavior-y:contain;
+}
+
+/* ==================== oms-v430-mobile-landscape-desktop ==================== */
+/* =========================================================
+   V4.30 — Mobile landscape desktop workspace
+   A touch phone/tablet in landscape uses the side-by-side desktop workspace,
+   but the app instance is never reloaded. Project/model/history/media state
+   remains live while only layout ownership changes.
+   ========================================================= */
+html.omsMobileLandscapeDesktop .editorMain{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.08fr)!important;
+  grid-template-rows:minmax(0,1fr)!important;
+  min-width:0!important;
+}
+html.omsMobileLandscapeDesktop .previewArea{
+  min-width:0!important;
+  min-height:0!important;
+  border-right:1px solid var(--line)!important;
+  border-bottom:0!important;
+}
+html.omsMobileLandscapeDesktop .timelineArea{
+  min-width:0!important;
+  min-height:0!important;
+  height:100%!important;
+}
+html.omsMobileLandscapeDesktop .editorSplitSlot{
+  display:none!important;
+}
+html.omsMobileLandscapeDesktop .portraitSideRail{
+  display:none!important;
+}
+html.omsMobileLandscapeDesktop .editorMain.portraitSideControls .viewport{
+  padding-left:4px!important;
+  padding-right:4px!important;
+}
+html.omsMobileLandscapeDesktop .editorMain.portraitSideControls .previewArea,
+html.omsMobileLandscapeDesktop .editorMain.portraitSideControls .timelineArea{
+  margin:0!important;
+}
+html.omsMobileLandscapeDesktop #drawer{
+  position:absolute!important;
+  left:auto!important;
+  right:0!important;
+  top:38px!important;
+  bottom:0!important;
+  width:min(100%,430px)!important;
+  height:auto!important;
+  max-height:none!important;
+  border-left:1px solid #353c52!important;
+  border-top:0!important;
+  border-radius:0!important;
+}
+html.omsMobileLandscapeDesktop #drawer.addDrawer{
+  max-height:none!important;
+}
+html.omsMobileLandscapeDesktop .plusBtn{
+  right:20px!important;
+}
+html.omsMobileLandscapeDesktop .shapeGrid{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+}
+/* The mobile bottom-sheet rule uses !important, so explicitly neutralize it
+   in landscape desktop mode. */
+html.omsMobileLandscapeDesktop #drawer:not(.addDrawer){
+  inset:38px 0 0 auto!important;
+  width:min(100%,430px)!important;
+  height:auto!important;
+  max-height:none!important;
+}
+
+/* ==================== oms-v431-desktop-canvas-split-menu-fit ==================== */
+/* V4.31 — mobile landscape desktop canvas split handle + layer-actions popup fit */
+html.omsMobileLandscapeDesktop .timelineArea{position:relative!important}
+#desktopCanvasSplitHandle{
+  position:absolute;
+  left:-13px;
+  top:10px;
+  width:26px;
+  height:44px;
+  border:1px solid #374055;
+  border-radius:12px;
+  background:linear-gradient(180deg,#22283a 0%,#1c2232 100%);
+  color:#aeb8cc;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:45;
+  box-shadow:0 8px 18px rgba(0,0,0,.26),0 0 0 1px rgba(255,255,255,.02);
+  touch-action:none;
+  -webkit-tap-highlight-color:transparent;
+}
+#desktopCanvasSplitHandle:hover,
+#desktopCanvasSplitHandle:focus-visible,
+#desktopCanvasSplitHandle.dragging{
+  color:#f2f6fd;
+  border-color:#4b566e;
+  background:linear-gradient(180deg,#2a3145 0%,#21283b 100%);
+  outline:none;
+}
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip{
+  position:relative;
+  width:18px;
+  height:18px;
+  transform:rotate(90deg);
+  display:block;
+}
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip::before,
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip::after,
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip i{
+  content:"";
+  position:absolute;
+  top:1px;
+  bottom:1px;
+  width:2px;
+  border-radius:2px;
+  background:currentColor;
+  opacity:.92;
+}
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip::before{left:3px}
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip i{left:8px}
+#desktopCanvasSplitHandle .desktopCanvasSplitGrip::after{left:13px}
+html.omsMobileLandscapeDesktop #desktopCanvasSplitHandle{display:flex}
+
+html.omsMobileLandscapeDesktop .layerActionsPopup{
+  width:min(344px,calc(100vw - 28px))!important;
+  max-height:calc(100vh - 24px)!important;max-height:calc(100dvh - 24px)!important;
+  padding:7px!important;
+  border-radius:16px!important;
+}
+html.omsMobileLandscapeDesktop .layerActionsHead{
+  min-height:42px!important;
+  padding:2px 4px 7px 8px!important;
+}
+html.omsMobileLandscapeDesktop .layerActionsHead b{font-size:12px!important}
+html.omsMobileLandscapeDesktop .layerActionsHead small{font-size:7.2px!important}
+html.omsMobileLandscapeDesktop .layerActionRow{
+  min-height:50px!important;
+  grid-template-columns:42px minmax(0,1fr)!important;
+  gap:7px!important;
+  padding:6px 7px!important;
+}
+html.omsMobileLandscapeDesktop .layerActionMenuIcon{width:31px!important;height:31px!important}
+html.omsMobileLandscapeDesktop .layerActionCopy b{font-size:11px!important}
+html.omsMobileLandscapeDesktop .layerActionCopy small{font-size:7.2px!important;margin-top:2px!important}
+html.omsMobileLandscapeDesktop .layerActionsStatus{font-size:7.2px!important;padding:4px 9px 1px!important}
+
+/* ==================== oms-v432-desktop-toolbar-split-autofit ==================== */
+/* V4.32 — toolbar split handle inside transport + rotated icon + composition autofit */
+#desktopCanvasSplitHandle{display:none!important}
+html.omsMobileLandscapeDesktop .transportLeft{justify-content:flex-start!important}
+#desktopCanvasSplitToolbarBtn{
+  display:none;
+  width:24px;
+  height:32px;
+  min-width:24px;
+  border:1px solid #3b455e;
+  border-radius:12px;
+  background:linear-gradient(180deg,#232a3c 0%,#1d2435 100%);
+  color:#c3cad8;
+  align-items:center;
+  justify-content:center;
+  margin-right:6px;
+  box-shadow:0 6px 14px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.02);
+  touch-action:none;
+  -webkit-tap-highlight-color:transparent;
+}
+#desktopCanvasSplitToolbarBtn:hover,
+#desktopCanvasSplitToolbarBtn:focus-visible,
+#desktopCanvasSplitToolbarBtn.dragging{
+  color:#ffffff;
+  border-color:#5a6784;
+  background:linear-gradient(180deg,#2d354a 0%,#232c3f 100%);
+  outline:none;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV{
+  position:relative;
+  width:14px;
+  height:16px;
+  display:block;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{
+  content:"";
+  position:absolute;
+  top:1px;
+  bottom:1px;
+  width:2px;
+  border-radius:999px;
+  background:currentColor;
+  opacity:.95;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before{left:1px}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{left:6px}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after{left:11px}
+html.omsMobileLandscapeDesktop #desktopCanvasSplitToolbarBtn{display:flex}
+@media(min-width:900px){
+  #desktopCanvasSplitToolbarBtn{display:flex}
+}
+
+html.omsMobileLandscapeDesktop .layerActionsPopup{
+  width:min(322px,calc(100vw - 20px))!important;
+  max-height:calc(100vh - 12px)!important;max-height:calc(100dvh - 12px)!important;
+  padding:6px!important;
+  border-radius:15px!important;
+}
+html.omsMobileLandscapeDesktop .layerActionsHead{min-height:38px!important;padding:1px 4px 6px 8px!important}
+html.omsMobileLandscapeDesktop .layerActionsHead b{font-size:11.5px!important}
+html.omsMobileLandscapeDesktop .layerActionsHead small{font-size:7px!important}
+html.omsMobileLandscapeDesktop .layerActionRow{
+  min-height:46px!important;
+  grid-template-columns:38px minmax(0,1fr)!important;
+  gap:6px!important;
+  padding:5px 6px!important;
+}
+html.omsMobileLandscapeDesktop .layerActionMenuIcon{width:28px!important;height:28px!important}
+html.omsMobileLandscapeDesktop .layerActionCopy b{font-size:10.6px!important}
+html.omsMobileLandscapeDesktop .layerActionCopy small{font-size:6.9px!important;margin-top:1px!important;line-height:1.25!important}
+html.omsMobileLandscapeDesktop .layerActionsStatus{font-size:6.9px!important;padding:4px 8px 1px!important}
+
+/* ==================== oms-v433-transport-center-split-fix ==================== */
+/* V4.33 — center playback-nav around Play, keep split handle independent, and simplify its visual */
+.transportBalanced{position:relative!important}
+.transportBalanced .transportCenter{justify-content:center!important}
+.transportBalanced .transportLeft.transportLeftEmpty{
+  visibility:hidden;
+  pointer-events:none;
+}
+#transportPlaybackCluster{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  min-width:0;
+}
+#transportPlaybackCluster > button{
+  display:grid;
+  place-items:center;
+}
+/* Preserve the original vertical side-rail behavior on portrait side-controls. */
+.portraitRightRail #transportPlaybackCluster{
+  flex-direction:column;
+  gap:1px;
+}
+
+/* Desktop PC/mobile-landscape split handle: keep it in the same toolbar row but remove
+   the pill/border so only the 3 vertical bars remain visually. */
+#desktopCanvasSplitToolbarBtn{
+  position:absolute!important;
+  left:10px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:18px!important;
+  min-width:18px!important;
+  height:22px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#c3cad8!important;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:6;
+}
+#desktopCanvasSplitToolbarBtn:hover,
+#desktopCanvasSplitToolbarBtn:focus-visible,
+#desktopCanvasSplitToolbarBtn.dragging{
+  color:#f5f8ff!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  outline:none!important;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV{
+  position:relative;
+  width:14px;
+  height:12px;
+  display:block;
+  transform:rotate(90deg);
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  height:2px;
+  border-radius:999px;
+  background:currentColor;
+  opacity:.95;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before{top:0}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{top:5px}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after{top:10px}
+
+html.omsMobileLandscapeDesktop #desktopCanvasSplitToolbarBtn{
+  display:flex!important;
+}
+@media(min-width:900px){
+  #desktopCanvasSplitToolbarBtn{display:flex!important}
+}
+
+/* Give the toolbar handle its own visual slot without pushing other buttons. */
+html.omsMobileLandscapeDesktop .transportBalanced{
+  padding-left:34px!important;
+}
+html.omsMobileLandscapeDesktop .transportBalanced .transportLeft{
+  justify-content:flex-start!important;
+}
+
+/* Keep the four navigation buttons optically centered around Play on every layout. */
+.transportBalanced .transportCenter,
+.transportBalanced .transportCenter #transportPlaybackCluster{
+  width:auto;
+  max-width:100%;
+}
+
+/* ==================== oms-v434-split-handle-3lines-fix ==================== */
+/* V4.34 — make the desktop canvas split handle show 3 vertical lines, not dots */
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV{
+  position:relative!important;
+  width:14px!important;
+  height:16px!important;
+  display:block!important;
+  transform:none!important;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after,
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{
+  content:""!important;
+  position:absolute!important;
+  top:1px!important;
+  bottom:1px!important;
+  left:auto!important;
+  right:auto!important;
+  width:2px!important;
+  height:auto!important;
+  border-radius:999px!important;
+  background:currentColor!important;
+  opacity:.95!important;
+}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::before{left:1px!important}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV i{left:6px!important}
+#desktopCanvasSplitToolbarBtn .desktopCanvasSplitGripV::after{left:11px!important}
+
+/* ==================== oms-v442-horizontal-preview-min-content-fix ==================== */
+/* V4.42 — A narrow horizontal preview must use the real split-column width.
+   The preview toolbar's min-content width previously expanded #viewport beyond
+   .previewArea, so fit zoom measured an invisible area behind the timeline. */
+.editorMain .previewArea{
+  min-width:0!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  overflow:hidden;
+}
+.editorMain .previewArea > .viewport{
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+}
+.editorMain .previewArea > .previewTools{
+  min-width:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:hidden;
+}
+.editorMain .previewArea > .previewTools .grow,
+.editorMain .previewArea > .previewTools .zoomCtl{
+  min-width:0;
+}
+.editorMain .previewArea > .previewTools .zoomCtl{
+  flex:0 1 100px;
+}
+.editorMain .previewArea > .previewTools .zoomCtl input{
+  min-width:0;
+  max-width:78px;
+}
+
+/* ==================== oms-v444-desktop-add-drawer-bottom-dock ==================== */
+/* V4.44 — desktop Add Hub is a real row below the timeline instead of a
+   430px right overlay. Inspector/property drawers deliberately keep their
+   existing right-side layout. Mobile landscape desktop mode is unchanged. */
+@media (min-width:900px){
+  html:not(.omsMobileLandscapeDesktop) .timelineArea:has(> #drawer.addDrawer:not(.hidden)){
+    grid-template-rows:38px minmax(0,1fr) clamp(220px,30vh,300px)!important;grid-template-rows:38px minmax(0,1fr) clamp(220px,30dvh,300px)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer{
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    grid-column:1!important;
+    grid-row:3!important;
+    align-self:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    height:100%!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    border-left:0!important;
+    border-top:1px solid #353c52!important;
+    border-radius:0!important;
+    box-shadow:0 -10px 24px rgba(0,0,0,.24)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTabs{
+    flex:0 0 auto;
+    width:100%;
+    min-width:0;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTab{
+    flex:1 1 0;
+    min-width:76px;
+    white-space:nowrap;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubBody{
+    flex:1 1 auto;
+    min-width:0;
+    min-height:0;
+    width:100%;
+    overflow:auto;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .mediaDrop{
+    width:calc(100% - 8px);
+    max-width:none;
+    margin:4px;
+  }
+}
+
+/* ==================== oms-v445-desktop-bottom-drawers-compact-add-hub ==================== */
+/* V4.45 — both desktop drawer families are docked below the timeline.
+   Add Hub uses a compact, fixed-fit layout so its own body never needs a
+   vertical scrollbar. Inspector keeps internal scrolling for long editors. */
+@media (min-width:900px){
+  html:not(.omsMobileLandscapeDesktop) .timelineArea:has(> #drawer.addDrawer:not(.hidden)){
+    grid-template-rows:38px minmax(0,1fr) clamp(260px,34vh,320px)!important;grid-template-rows:38px minmax(0,1fr) clamp(260px,34dvh,320px)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea:has(> #drawer:not(.hidden):not(.addDrawer)){
+    grid-template-rows:38px minmax(0,1fr) clamp(260px,38vh,380px)!important;grid-template-rows:38px minmax(0,1fr) clamp(260px,38dvh,380px)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer:not(.hidden){
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    grid-column:1!important;
+    grid-row:3!important;
+    align-self:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    height:100%!important;
+    max-height:none!important;
+    overflow:hidden!important;
+    border-left:0!important;
+    border-top:1px solid #353c52!important;
+    border-radius:0!important;
+    box-shadow:0 -10px 24px rgba(0,0,0,.24)!important;
+  }
+
+  /* Inspector and property editors: header stays fixed, long content scrolls
+     inside the drawer without covering the timeline above. */
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer:not(.addDrawer) > .drawerHead{
+    flex:0 0 42px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer:not(.addDrawer) > .drawerBody{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    overflow-y:auto!important;
+    overflow-x:hidden!important;
+  }
+
+  /* Add Hub: compact header and a body whose children fit its available row. */
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTabs{
+    flex:0 0 50px!important;
+    width:100%!important;
+    min-width:0!important;
+    height:50px!important;
+    padding:0 4px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTab{
+    flex:1 1 0!important;
+    min-width:76px!important;
+    height:50px!important;
+    padding:5px 4px 4px!important;
+    font-size:7.5px!important;
+    white-space:nowrap!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTab span{
+    margin-bottom:3px!important;
+    font-size:18px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubBody{
+    flex:1 1 auto!important;
+    display:flex!important;
+    flex-direction:column!important;
+    min-width:0!important;
+    min-height:0!important;
+    width:100%!important;
+    padding:7px!important;
+    overflow:hidden!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubTitle{
+    flex:0 0 27px!important;
+    min-height:27px!important;
+    padding:0 2px 5px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubClose{
+    width:27px!important;
+    min-width:27px!important;
+    height:27px!important;
+    padding:0!important;
+    border-radius:8px!important;
+    font-size:16px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .shapeGrid{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    height:auto!important;
+    padding:0!important;
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    grid-template-rows:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    overflow:hidden!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .shapeGrid:has([data-obj]){
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-rows:minmax(0,1fr)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .shapeGrid:has([data-template]){
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-template-rows:minmax(0,1fr)!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .shapeItem{
+    min-width:0!important;
+    min-height:0!important;
+    width:100%!important;
+    height:100%!important;
+    padding:2px!important;
+    border-radius:8px!important;
+    font-size:20px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .mediaDrop{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    width:100%!important;
+    height:auto!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:8px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .mediaDrop button{
+    margin-top:7px!important;
+    padding:6px 12px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubBody > .miniNote{
+    flex:0 0 auto!important;
+    margin-top:4px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubBody > .drawerBody{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding:0!important;
+    display:grid!important;
+    place-items:center!important;
+    overflow:hidden!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea > #drawer.addDrawer .addHubBody > .drawerBody .createBtn{
+    width:min(88%,320px)!important;
+    height:32px!important;
+    margin:0!important;
+  }
+}
+
+/* ==================== oms-v435-play-anchored-transport ==================== */
+/* V4.40 — the visible playhead is the authoritative X anchor for Play/Pause
+   and the four navigation controls. Timeline DOM mutations remain isolated. */
+.transportBalanced{position:relative!important}
+.transportBalanced .transportCenter{justify-content:center!important;position:relative;z-index:5}
+.transportBalanced .transportLeft.omsPlayAnchorEmpty{
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.transportBalanced > button.omsPlayheadAnchoredControl{
+  position:absolute!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  line-height:0!important;
+  z-index:5!important;
+  transform:translate(-50%,-50%)!important;
+}
+.transportBalanced > #playBtn.omsPlayheadAnchoredControl{z-index:6!important}
+#transportPlaybackCluster:empty{display:none!important}
+/* V4.73 — session-only Pre-render Record control. It shares the transport row
+   but stays independent from the playhead-anchored navigation geometry. */
+#preRenderRecordBtn{
+  position:absolute!important;
+  left:7px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  width:34px!important;
+  min-width:34px!important;
+  height:32px!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  z-index:7!important;
+  color:#9aa3b8!important;
+  background:transparent!important;
+  border:0!important;
+}
+#preRenderRecordBtn .preRenderRecordDot{
+  width:10px;
+  height:10px;
+  border:1.5px solid currentColor;
+  border-radius:50%;
+  background:transparent;
+  box-sizing:border-box;
+  transition:background .12s ease,color .12s ease,box-shadow .12s ease,transform .12s ease;
+}
+#preRenderRecordBtn:hover,#preRenderRecordBtn:focus-visible{color:#e4e8f0!important;outline:none!important}
+#preRenderRecordBtn.active{color:#ff667c!important;background:rgba(255,102,124,.08)!important}
+#preRenderRecordBtn.active .preRenderRecordDot{background:currentColor;box-shadow:0 0 0 3px rgba(255,102,124,.13)}
+/* Desktop/mobile-landscape already reserves the far-left split handle. Record
+   sits immediately after it and remains the leftmost playback control. */
+html.omsMobileLandscapeDesktop #preRenderRecordBtn{left:35px!important}
+@media(min-width:900px){#preRenderRecordBtn{left:35px!important}}
+/* Portrait side-rail has no horizontal "far left". The geometry controller
+   moves the same button into the start of the rail instead of duplicating it. */
+.portraitRightRail #preRenderRecordBtn{
+  position:static!important;
+  left:auto!important;top:auto!important;
+  transform:none!important;
+  flex:0 0 auto;
+}
+
+/* ==================== oms-v436-right-dock-audio-layer-actions ==================== */
+/* V4.36 — Music + Layer Actions use the toolbar's right padding as their anchor. */
+.transportBalanced{position:relative!important}
+#transportRightDock{
+  position:absolute;
+  right:7px;
+  top:50%;
+  transform:translateY(-50%);
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:2px;
+  z-index:7;
+  pointer-events:auto;
+}
+#transportRightDock > button{
+  flex:0 0 auto;
+  margin:0!important;
+}
+/* The original right group still exists for compatibility, but Music and
+   Layer Actions no longer participate in its flex width. */
+.transportBalanced .transportRight.omsRightDockDetached{
+  min-width:0!important;
+}
+/* Preserve the established vertical rail behavior for true portrait side mode. */
+.portraitRightRail #transportRightDock{display:none!important}
+
+/* ==================== oms-v435-svg-transport-icons ==================== */
+/* V4.40 — geometrically mirrored SVG transport icons. Keyframe paths are
+   shifted within the 28px viewBox so their stroke-length optical centroid is x=14. */
+.transportNavSvgBtn{
+  display:grid!important;
+  place-items:center!important;
+  line-height:0!important;
+}
+.transportNavSvg{
+  width:28px;
+  height:24px;
+  display:block;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.75;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+  pointer-events:none;
+}
+/* Right-side icons are mirrored inside SVG geometry, not with CSS transforms,
+   so Android rasterization uses the same viewBox coordinate system. */
+/* Same optical box on both sides of the playhead anchor across mobile and desktop. */
+#prevKey .transportNavSvg,#nextKey .transportNavSvg{width:29px;height:24px}
+#jumpStart .transportNavSvg,#jumpEnd .transportNavSvg{width:25px;height:24px}
+
+/* ==================== oms-v437-svg-play-center-fix ==================== */
+/* V4.40 — Play/Pause use controlled SVG geometry; their button center is
+   positioned directly on the rendered playhead by the transport controller. */
+#playBtn{
+  display:grid!important;
+  place-items:center!important;
+  line-height:0!important;
+}
+#playBtn .transportPlaySvg{
+  width:24px;
+  height:24px;
+  display:block;
+  overflow:visible;
+  pointer-events:none;
+}
+#playBtn .transportPlaySvg.play path{
+  fill:currentColor;
+  stroke:none;
+}
+#playBtn .transportPlaySvg.pause path{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:3;
+  stroke-linecap:round;
+  vector-effect:non-scaling-stroke;
+}
+
+/* ==================== oms-v448-layer-visibility-eye ==================== */
+/* V4.48 — The existing timeline visibility control is now an eye button.
+   Hidden layers remain selectable/editable, but their row is visibly subdued. */
+.track .eye{
+  width:25px;
+  height:25px;
+  display:grid;
+  place-items:center;
+  color:#8f9bb3;
+  cursor:pointer;
+  border-radius:5px;
+  transition:color .14s ease,background-color .14s ease;
+}
+.track .eye:hover{color:#d8dfef;background:rgba(255,255,255,.055)}
+.track .eye:focus-visible{outline:1px solid var(--accent);outline-offset:-2px}
+.trackEyeSvg{
+  width:15px;
+  height:15px;
+  display:block;
+  overflow:visible;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.75;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+.trackEyeSlash{stroke-width:2.1}
+.track.layerHidden .trackName,
+.track.layerHidden .lock{opacity:.52}
+.track.layerHidden .trackLane{opacity:.46}
+.track.layerHidden .eye{color:#68738a}
+.track .trackName,
+.track .lock,
+.track .trackLane{transition:opacity .14s ease}
+@media (prefers-reduced-motion:reduce){
+  .track .eye,.track .trackName,.track .lock,.track .trackLane{transition:none}
+}
+
+/* ==================== oms-v449-selected-layer-export ==================== */
+/* V4.49 — persistent multi-select affordance and selected-layer export range. */
+.layerActionsBtn.selectionMode{
+  color:var(--accent)!important;
+  background:rgba(101,226,194,.12)!important;
+  box-shadow:inset 0 0 0 1px rgba(101,226,194,.38);
+}
+.layerActionMenuIcon.exportSelection::before{
+  left:4px;
+  top:7px;
+  width:24px;
+  height:20px;
+  border-color:#8c98b1;
+  background:#252a3e;
+}
+.layerActionMenuIcon.exportSelection::after{display:none}
+.layerActionMenuIcon.exportSelection i{
+  position:absolute;
+  z-index:3;
+  right:1px;
+  top:0;
+  width:18px;
+  height:18px;
+  display:grid;
+  place-items:center;
+  border-radius:6px;
+  color:#10201c;
+  background:var(--accent);
+  box-shadow:0 0 0 2px #252a3e;
+  font-size:12px;
+  font-style:normal;
+  font-weight:850;
+}
+.trackHead.multiSel{
+  background:linear-gradient(90deg,rgba(101,226,194,.18),rgba(58,74,101,.48))!important;
+  box-shadow:inset 3px 0 0 var(--accent),inset 0 0 0 1px rgba(101,226,194,.22);
+}
+.trackHead{
+  grid-template-columns:25px minmax(0,1fr)!important;
+}
+.trackHead .lock{
+  display:none!important;
+}
+.trackHead.layer-select-armed{
+  background:linear-gradient(90deg,rgba(101,226,194,.15),rgba(34,43,56,.96))!important;
+  box-shadow:inset 3px 0 0 rgba(101,226,194,.72);
+}
+.clip.multiSel{
+  outline:2px solid rgba(126,234,209,.95);
+  outline-offset:1px;
+  filter:brightness(1.08) saturate(1.08);
+}
+.exportScopeNotice{
+  display:grid;
+  gap:3px;
+  margin:0 0 10px;
+  padding:10px 12px;
+  border:1px solid rgba(101,226,194,.38);
+  border-radius:10px;
+  color:#dffaf3;
+  background:rgba(40,112,94,.16);
+}
+.exportScopeNotice.hidden{display:none!important}
+.exportScopeNotice b{font-size:11px}
+.exportScopeNotice small{font-size:9px;color:#8fe6cf;line-height:1.35}
+.exportSheet.selectedLayerExport .nonVideoExportOption{display:none}
+
+/* ==================== oms-v454-multi-layer-arrange ==================== */
+/* V4.54 local preview — unified toolbar surfaces + stepped sequence icon. */
+.drawer.multiSelectDrawer{
+  left:0;
+  right:0;
+  top:auto;
+  bottom:0;
+  width:100%;
+  height:auto;
+  max-height:92px;
+  overflow:hidden;
+}
+.drawer.multiSelectDrawer>.drawerHead{
+  flex:0 0 26px!important;
+  height:26px!important;
+  min-height:26px!important;
+  padding:0 7px;
+}
+.drawer.multiSelectDrawer>.drawerHead b{font-size:9px}
+.drawer.multiSelectDrawer>.drawerHead button{font-size:15px}
+.multiSelectBody{
+  flex:1 1 auto;
+  min-width:0;
+  min-height:0;
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(118px,.82fr);
+  gap:6px;
+  align-items:center;
+  padding:3px 6px 4px;
+  overflow:hidden!important;
+  overscroll-behavior:none;
+  scrollbar-width:none;
+}
+#drawer.multiSelectDrawer .multiSelectBody::-webkit-scrollbar{display:none;width:0;height:0}
+.multiTimeGroup{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:4px;
+  padding:0;
+  border:0;
+}
+.multiTimeGroup.outside{grid-template-columns:repeat(2,minmax(0,1fr))}
+.multiTimeBtn{
+  min-width:0;
+  height:46px;
+  border:1px solid #374057;
+  border-radius:7px;
+  background:#252a3e;
+  color:#dbe1ee;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:3px;
+}
+.multiTimeBtn:active,
+.multiTimeBtn:focus-visible,
+.multiArrangeGroup button:active,
+.multiArrangeGroup button:focus-visible{
+  border-color:var(--accent);
+  color:var(--accent);
+  outline:none;
+}
+.multiTimeBtn>span{font-size:16px;line-height:1;letter-spacing:-2px}
+.multiTimeBtn>.mqRecallIcon{min-height:17px;letter-spacing:0}
+.multiTimeBtn>.mqRecallIcon svg{width:25px;height:17px;display:block;overflow:visible}
+.multiTimeBtn>.mqRecallIcon.before svg{transform:scaleX(-1)}
+.multiTimeBtn small{
+  max-width:100%;
+  color:#aab3c6;
+  font-size:6.5px;
+  line-height:1.05;
+  text-align:center;
+  white-space:normal;
+}
+.multiArrangeGroup{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:center;
+  gap:4px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+}
+.multiArrangeGroup button{
+  min-width:0;
+  height:46px;
+  border:1px solid #374057;
+  border-radius:7px;
+  background:#252a3e;
+  color:#dbe1ee;
+  display:grid;
+  place-items:center;
+  padding:0;
+}
+.multiArrangeIcon{
+  position:relative;
+  display:block;
+  width:29px;
+  height:22px;
+}
+.multiArrangeIcon i{
+  position:absolute;
+  display:block;
+  height:3px;
+  border:1.5px solid currentColor;
+  background:transparent;
+}
+.multiArrangeIcon i:nth-child(1){top:2px;width:24px}
+.multiArrangeIcon i:nth-child(2){top:9px;width:17px}
+.multiArrangeIcon i:nth-child(3){top:16px;width:10px}
+.multiArrangeIcon.alignStart i{left:2px}
+.multiArrangeIcon.sequence i{
+  width:11px;
+  height:4px;
+  border:0;
+  border-radius:1px;
+  background:currentColor;
+}
+.multiArrangeIcon.sequence i:nth-child(1){top:1px;left:17px;right:auto;width:11px}
+.multiArrangeIcon.sequence i:nth-child(2){top:9px;left:9px;width:11px}
+.multiArrangeIcon.sequence i:nth-child(3){top:17px;left:1px;width:11px}
+.multiArrangeIcon.alignEnd i{right:2px}
+@media(max-width:430px){
+  .multiSelectBody{grid-template-columns:minmax(0,1.48fr) minmax(110px,.82fr);gap:4px;padding:2px 5px 3px}
+  .multiTimeGroup{gap:3px}
+  .multiTimeBtn{height:41px;padding:2px 1px}
+  .multiTimeBtn>span{font-size:15px}
+  .multiTimeBtn small{font-size:6px}
+  .multiArrangeGroup{gap:3px;padding:0}
+  .multiArrangeGroup button{height:41px}
+  .multiArrangeIcon{transform:scale(.78)}
+}
+@media(max-width:899px){
+  #drawer.multiSelectDrawer:not(.addDrawer){
+    height:76px!important;
+    max-height:76px!important;
+  }
+  #drawer.multiSelectDrawer:not(.addDrawer)>.drawerHead{
+    flex:0 0 26px!important;
+    height:26px!important;
+    min-height:26px!important;
+  }
+  #drawer.multiSelectDrawer:not(.addDrawer)>.multiSelectBody{
+    overflow:hidden!important;
+    overflow-x:hidden!important;
+    overflow-y:hidden!important;
+  }
+}
+@media(min-width:900px){
+  html:not(.omsMobileLandscapeDesktop) .timelineArea:has(>#drawer.multiSelectDrawer:not(.hidden)){
+    grid-template-rows:38px minmax(0,1fr) 84px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea>#drawer.multiSelectDrawer:not(.hidden){
+    height:84px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea>#drawer.multiSelectDrawer:not(.addDrawer)>.drawerHead{
+    flex:0 0 26px!important;
+    height:26px!important;
+    min-height:26px!important;
+  }
+  html:not(.omsMobileLandscapeDesktop) .timelineArea>#drawer.multiSelectDrawer:not(.addDrawer)>.multiSelectBody{
+    padding:3px 6px 4px!important;
+    overflow:hidden!important;
+    overflow-x:hidden!important;
+    overflow-y:hidden!important;
+  }
+}
+.blendOpacityPanel{display:flex;flex-direction:column;gap:8px;padding:9px;background:#171b29;scroll-padding-top:106px}
+.blendOpacityCard,.blendCurrent,.blendCategory{border:1px solid #30384d;background:#202638;border-radius:10px;overflow:hidden}
+.blendOpacityCard{position:sticky;top:0;z-index:5;flex:0 0 auto;padding:10px;box-shadow:0 7px 16px rgba(9,12,19,.72)}
+.blendOpacityHeading{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.blendOpacityHeading>div{flex:1;min-width:0}
+.blendOpacityHeading b{display:block;color:#edf2fb;font-size:11px}
+.blendOpacityHeading small{display:block;color:#818ca3;font-size:8px;margin-top:2px}
+.blendOpacityControl{display:grid;grid-template-columns:24px minmax(0,1fr) 64px;align-items:center;gap:8px}
+.blendOpacityIcon{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#151a27;color:var(--accent);font-size:16px}
+.blendOpacityControl input[type=range]{min-width:0;width:100%}
+.blendOpacityControl label{height:32px;border:1px solid #394259;border-radius:8px;background:#111622;display:grid;grid-template-columns:1fr auto;align-items:center;padding:0 7px;color:#8d98ad}
+.blendOpacityControl label:focus-within{border-color:var(--accent)}
+.blendOpacityControl input[type=number]{width:100%;min-width:0;border:0;outline:0;background:transparent;color:#eef3fb;text-align:right;font:700 12px/1 system-ui;-moz-appearance:textfield}
+.blendOpacityControl input[type=number]::-webkit-inner-spin-button,.blendOpacityControl input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.blendOpacityPresets{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}
+.blendOpacityPresets button{height:25px;border:1px solid #343d53;border-radius:6px;background:#181e2d;color:#8f9ab0;font-size:8px}
+.blendOpacityPresets button.active{border-color:var(--accent);background:#1c3436;color:#9cf4de}
+.blendCurrent{min-height:34px;padding:0 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.blendCurrent span{color:#808ba1;font-size:8px;text-transform:uppercase;letter-spacing:.55px}
+.blendCurrent b{color:var(--accent);font-size:10px}
+.blendCategories{display:grid;gap:6px}
+.blendCategoryHead{width:100%;height:34px;border:0;background:transparent;color:#d9e0ed;display:grid;grid-template-columns:14px 1fr auto;align-items:center;text-align:left;padding:0 9px}
+.blendCategoryHead b{font-size:10px}
+.blendCategoryHead small{color:#77839a;font-size:7px}
+.blendCategoryArrow{font-size:18px;color:#8591a8;transform-origin:center;transition:transform .14s ease}
+.blendCategory.open .blendCategoryArrow{transform:rotate(90deg);color:var(--accent)}
+.blendModeGrid{display:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:0 7px 8px}
+.blendCategory.open .blendModeGrid{display:grid}
+.blendModeBtn{position:relative;min-width:0;min-height:63px;border:1px solid #353e55;border-radius:8px;background:#252b3f;color:#9ca7bb;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:5px 3px}
+.blendModeBtn:active,.blendModeBtn:focus-visible{border-color:var(--accent);outline:none}
+.blendModeBtn.active{border-color:var(--accent);background:#1d3437;color:#dffcf4;box-shadow:inset 0 -2px 0 var(--accent)}
+.blendModeSwatch{position:relative;display:block;width:36px;height:25px}
+.blendModeSwatch i{position:absolute;width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.32)}
+.blendModeSwatch i:first-child{left:1px;top:2px;background:linear-gradient(135deg,#705bd6 0 48%,#f0ba55 49% 100%)}
+.blendModeSwatch i:last-child{right:1px;top:0;background:linear-gradient(135deg,#40d6b6 0 48%,#df557e 49% 100%)}
+.blendModeName{max-width:100%;font-size:7.5px;line-height:1.1;white-space:normal;text-align:center}
+.blendModeCheck{display:none;position:absolute;right:4px;top:3px;color:var(--accent);font-size:8px}
+.blendModeBtn.active .blendModeCheck{display:block}
+.blendMaskCard{border:1px solid #354057;background:#1d2333;border-radius:12px;padding:10px;overflow:hidden;flex:0 0 auto}.blendMaskCard.inactive{border-color:#2b3244}.blendMaskHeading{display:flex;align-items:center;gap:8px}.blendMaskGlyph{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#182a2e;color:#73e2bd;font-size:18px}.blendMaskHeading>div{flex:1;min-width:0}.blendMaskHeading b{display:block;color:#edf2fb;font-size:11px}.blendMaskHeading small{display:block;color:#8490a7;font-size:8px;margin-top:2px}.blendMaskState{border:1px solid #3b465e;border-radius:999px;padding:4px 7px;color:#9aa6bb;font-size:8px}.blendMaskCard:not(.inactive) .blendMaskState{border-color:#4f9d8b;background:#18322f;color:#8ff0d5}.blendMaskSource{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:9px;padding:8px;border-radius:8px;background:#151b29}.blendMaskSource span{color:#cbd4e4;font-size:9px;font-weight:700;white-space:nowrap}.blendMaskSource small{color:#7f8ba1;font-size:7px;text-align:right;line-height:1.35}.blendMaskModes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}.blendMaskModes button,.blendMaskScopes button{border:1px solid #353e53;background:#20273a;color:#9ca8bd;border-radius:9px;min-width:0}.blendMaskModes button{min-height:58px;display:grid;place-items:center;align-content:center;gap:2px}.blendMaskModes i{font-style:normal;font-size:20px}.blendMaskModes span,.blendMaskScopes span{font-size:9px;font-weight:700}.blendMaskModes small,.blendMaskScopes small{font-size:7px;color:#77839a}.blendMaskModes button.active,.blendMaskScopes button.active{border-color:#66d9ba;background:#19322f;color:#a1f1dc;box-shadow:inset 0 0 0 1px rgba(115,226,189,.16)}.blendMaskModes button[data-matte-mode=exclude].active{border-color:#e690a8;background:#34202b;color:#ffc0d0}.blendMaskScopeTitle{margin:10px 1px 5px;color:#8c98ad;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}.blendMaskScopes{display:grid;grid-template-columns:1fr 1fr;gap:6px}.blendMaskScopes button{min-height:42px;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:6px}.blendMaskTargets{display:grid;gap:4px;margin-top:7px;max-height:150px;overflow:auto;padding-right:2px}.blendMaskTarget{display:flex;align-items:center;gap:8px;padding:7px 8px;border:1px solid #30394d;border-radius:8px;background:#171d2b}.blendMaskTarget:has(input:checked){border-color:#4c9f8a;background:#18302f}.blendMaskTarget input{width:16px;height:16px;accent-color:#73e2bd}.blendMaskTarget span{min-width:0}.blendMaskTarget b,.blendMaskTarget small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.blendMaskTarget b{font-size:9px;color:#cbd5e5}.blendMaskTarget small{font-size:7px;color:#7f8ba1;margin-top:2px}.blendMaskEmpty,.blendMaskNote{padding:8px;border-radius:7px;background:#151a27;color:#7f8ba1;font-size:8px;line-height:1.4}.blendMaskNote{margin-top:7px}.blendMaskCard.inactive .blendMaskSource,.blendMaskCard.inactive .blendMaskScopes,.blendMaskCard.inactive .blendMaskScopeTitle,.blendMaskCard.inactive .blendMaskTargets,.blendMaskCard.inactive .blendMaskNote{opacity:.58}
+@media(max-width:390px){
+  .blendOpacityPanel{padding:7px;gap:6px;scroll-padding-top:98px}.blendOpacityCard{padding:8px}.blendModeGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:0 5px 6px}.blendModeBtn{min-height:58px;padding:4px 2px}.blendModeSwatch{transform:scale(.9)}.blendModeName{font-size:7px}.blendMaskCard{padding:8px}.blendMaskModes button{min-height:52px}.blendMaskSource{padding:7px}.blendMaskTargets{max-height:132px}
+}
+@media(min-width:900px){
+  .blendModeGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.blendModeBtn{min-height:68px}.blendOpacityPanel{padding:12px}
+}
+
+/* V5.102 — Edit Points uses the same mobile height envelope as Inspector. */
+@media(max-width:899px){
+  .vectorPenTouchpadDock.vectorEditPoints{
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    height:clamp(210px,36vh,300px)!important;height:clamp(210px,36dvh,300px)!important;
+    max-height:clamp(210px,36vh,300px)!important;max-height:clamp(210px,36dvh,300px)!important;
+    border-radius:14px 14px 0 0!important;
+    border-left:0!important;
+    border-right:0!important;
+    border-bottom:0!important;
+    grid-template-columns:62px minmax(0,1fr) 84px!important;
+    grid-template-rows:42px minmax(0,1fr)!important;
+    box-shadow:0 -14px 35px rgba(0,0,0,.30)!important;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead{
+    min-height:42px;
+    padding:0 10px;
+    gap:8px;
+    border-bottom-color:#30364b;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead b{
+    flex:0 0 auto;
+    font-size:11px;
+    white-space:nowrap;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead span{
+    flex:1 1 auto;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    text-align:right;
+    font-size:8px;
+    letter-spacing:.035em;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenLeftRail{
+    padding:8px 5px 8px 7px;
+    gap:5px;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenRailBtn{
+    border-radius:9px;
+    font-size:19px;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenRailBtn small{
+    bottom:5px;
+    font-size:6.5px;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenRailBtn.pointAction{font-size:27px}
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpad{
+    margin:8px 7px 8px 8px!important;
+    border-radius:10px;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHint{
+    padding:16px;
+    font-size:9px;
+    line-height:1.35;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenEditPad{
+    margin:8px 8px 8px 2px!important;
+    border-radius:10px;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenEditPad:after{top:7px}
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenEditPadHint{bottom:7px}
+}
+@media(max-width:700px){
+  .vectorPenTouchpadDock.vectorEditPoints{
+    grid-template-columns:58px minmax(0,1fr) 76px!important;
+    height:clamp(210px,36vh,300px)!important;height:clamp(210px,36dvh,300px)!important;
+    max-height:clamp(210px,36vh,300px)!important;max-height:clamp(210px,36dvh,300px)!important;
+  }
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead b{font-size:10px}
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenTouchpadHead span{font-size:7.2px}
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenRailBtn{font-size:18px}
+  .vectorPenTouchpadDock.vectorEditPoints .vectorPenRailBtn.pointAction{font-size:25px}
+}
+
+/* ==================== oms-am-timeline-v197 ==================== */
+/* Keep eye, folder toggle and layer name on one explicit grid row on mobile. */
+.trackHead{
+  grid-template-columns:25px minmax(0,1fr)!important;
+  grid-template-rows:minmax(0,1fr);
+  min-width:0;
+  min-height:0;
+}
+.trackHead>.eye{grid-column:1;grid-row:1}
+.trackHead>.trackName{grid-column:2;grid-row:1;min-width:0;align-self:center}
+.trackHead.amTimelineGroupHead{grid-template-columns:25px 16px minmax(0,1fr)!important}
+.trackHead.amTimelineGroupHead>.trackName{grid-column:3}
+.trackHead>.amGroupToggle{
+  grid-column:2;
+  grid-row:1;
+  width:16px;
+  height:24px;
+  padding:0;
+  border:0;
+  background:transparent;
+  color:#78dfcb;
+  font-size:11px;
+  line-height:1;
+  touch-action:manipulation;
+}
+.amGroupToggle:focus-visible{outline:1px solid var(--accent);outline-offset:-1px}
+.clip.null{background:#e5c166;color:#151923;border:1px dashed #786126}
+.clip.group{background:#929fdd;color:#151923;border:1px solid #b9c4f1}
+
+
+/* ==================== oms-diagnostics-v198 ==================== */
+#omsDiagnosticsHubModal button { color:#171923; }
+#omsDiagnosticsHubModal #omsDiagCopy { color:#fff; }
+#omsDiagMemoryV198 { margin:10px 0; padding:12px; background:#fff; color:#171923; border:1px solid #d0d6e2; border-radius:12px; }
+#omsDiagMemoryV198 h3 { font-size:14px; margin:0 0 6px; }
+#omsDiagMemoryV198 p, #omsDiagMemoryV198 details { font-size:12px; line-height:1.5; margin:6px 0; }
+#omsDiagMemoryV198 .omsDiagMemoryActions { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+#omsDiagMemoryV198 button { border:1px solid #bcc5d5; background:#f1f4f9; color:#171923; padding:10px 12px; min-height:40px; border-radius:9px; font-size:12px; font-weight:750; cursor:pointer; }
+#omsDiagMemoryV198 #omsDiagRamTest { background:#172c47; border-color:#172c47; color:#fff; }
+#omsDiagMemoryV198 button:focus-visible, #omsDiagMemoryV198 summary:focus-visible { outline:3px solid #2873da; outline-offset:2px; }
+#omsDiagMemoryV198 .omsDiagMemoryRow { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px; padding:7px 0; border-bottom:1px solid #e7eaf0; font-size:12px; line-height:1.4; }
+#omsDiagMemoryV198 .omsDiagMemoryRow strong { text-align:right; overflow-wrap:anywhere; }
+#omsDiagMemoryV198 small { display:block; color:#555e70; font-size:11px; line-height:1.5; margin-top:8px; }
+#omsDiagMemoryV198 summary { cursor:pointer; font-weight:700; }
+#omsDiagMemoryV198 ul { margin:8px 0; padding-left:20px; }
+#omsDiagMemoryV198 .omsDiagMemoryPrivacy { color:#555e70; font-size:11px; }
+@media(max-width:480px) { #omsDiagMemoryV198 .omsDiagMemoryRow { grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); font-size:11px; } }

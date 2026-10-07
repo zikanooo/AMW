@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Open Motion",
-  "short_name": "Open Motion",
-  "description": "Open Motion — motion graphics dan video editor berbasis web.",
+  "name": "AXE MOTION",
+  "short_name": "AXE MOTION",
+  "description": "AXE MOTION — motion graphics dan video editor berbasis web dengan tema glassmorphism transparan.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
